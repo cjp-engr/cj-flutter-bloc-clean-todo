@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:frontend/2_application/core/routes/routes.dart';
 import 'package:frontend/2_application/core/services/theme_service.dart';
-import 'package:frontend/2_application/pages/register/register_page.dart';
 import 'package:frontend/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -21,13 +21,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeService>(builder: (context, themeService, child) {
-      return MaterialApp(
+      return MaterialApp.router(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         themeMode: themeService.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
-        home: const RegisterPage(),
+        routerConfig: router,
       );
     });
   }

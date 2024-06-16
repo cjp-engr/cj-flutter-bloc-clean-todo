@@ -4,12 +4,14 @@ import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 
 import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
+import 'package:frontend/2_application/core/routes/route_name.dart';
 import 'package:frontend/2_application/core/utils/build_context_ext.dart';
 import 'package:frontend/2_application/core/utils/icon_const.dart';
 import 'package:frontend/2_application/core/widgets/app_bar.dart';
 import 'package:frontend/2_application/core/widgets/buttons.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -165,7 +167,9 @@ class _ButtonsWidget extends StatelessWidget {
           children: [
             InstaText(text: '${context.appLocalization.haveAnAccount} '),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                context.goNamed(TodoRouteName.login);
+              },
               child: InstaText(text: context.appLocalization.login),
             ),
           ],

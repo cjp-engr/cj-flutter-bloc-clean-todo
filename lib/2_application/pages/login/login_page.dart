@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
+import 'package:frontend/2_application/core/routes/route_name.dart';
 import 'package:frontend/2_application/core/utils/build_context_ext.dart';
 import 'package:frontend/2_application/core/utils/icon_const.dart';
 import 'package:frontend/2_application/core/widgets/app_bar.dart';
 import 'package:frontend/2_application/core/widgets/buttons.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
+import 'package:frontend/2_application/pages/login/cubit/login_cubit.dart';
+import 'package:go_router/go_router.dart';
+
+class LoginPageWrapperProvider extends StatelessWidget {
+  const LoginPageWrapperProvider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => LoginCubit(),
+      child: const LoginPage(),
+    );
+  }
+}
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -41,53 +57,26 @@ class _LoginPageState extends State<LoginPage> {
               reverse: true,
               children: [
                 const SizedBox(height: InstaSpacing.small),
-                _buildHeader(),
+                const _HeaderWidget(),
                 const SizedBox(height: InstaSpacing.extraLarge),
-                _buildLoginIdentifiers(),
+                InstaTextField(
+                  label: context.appLocalization.userNameOrEmail,
+                  controller: _emailController,
+                ),
                 const SizedBox(height: InstaSpacing.small),
-                _buildPassword(),
+                InstaTextField(
+                  label: context.appLocalization.password,
+                  obscureText: true,
+                  controller: _passwordController,
+                ),
                 const SizedBox(height: InstaSpacing.medium),
-                _buildLogin(),
                 const SizedBox(height: InstaSpacing.extraLarge * 4),
-                _buildRegisterRoute(),
+                _ButtonsWidget(onPress: () => _submit()),
               ].reversed.toList(),
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildHeader() => Column(
-        children: [
-          Image.asset(
-            IconConst.todo,
-            scale: 1,
-          ),
-          InstaText(
-            text: context.appLocalization.appTitle,
-            fontSize: InstaFontSize.extraLarge,
-            fontWeight: FontWeight.bold,
-          ),
-        ],
-      );
-
-  Widget _buildLoginIdentifiers() => InstaTextField(
-        label: context.appLocalization.userNameOrEmail,
-        controller: _emailController,
-      );
-
-  Widget _buildPassword() => InstaTextField(
-        label: context.appLocalization.password,
-        obscureText: true,
-        controller: _passwordController,
-      );
-
-  Widget _buildLogin() {
-    return PrimaryButton(
-      width: double.infinity,
-      text: context.appLocalization.login,
-      onPressed: _submit,
     );
   }
 
@@ -100,18 +89,61 @@ class _LoginPageState extends State<LoginPage> {
 
     if (form == null || !form.validate()) return;
   }
+}
 
-  Widget _buildRegisterRoute() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          InstaText(text: '${context.appLocalization.dontHaveAnAccount} '),
-          InkWell(
-            // onTap: () => context.goNamed(InstaRouteNames.register),
-            child: InstaText(
-              text: context.appLocalization.signUp,
-              fontWeight: FontWeight.bold,
+class _HeaderWidget extends StatelessWidget {
+  const _HeaderWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset(
+          IconConst.todo,
+          scale: 1,
+        ),
+        InstaText(
+          text: context.appLocalization.appTitle,
+          fontSize: InstaFontSize.extraLarge,
+          fontWeight: FontWeight.bold,
+        ),
+      ],
+    );
+  }
+}
+
+class _ButtonsWidget extends StatelessWidget {
+  final VoidCallback onPress;
+  const _ButtonsWidget({
+    required this.onPress,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        PrimaryButton(
+          width: double.infinity,
+          text: context.appLocalization.login,
+          onPressed: onPress,
+        ),
+        const SizedBox(height: InstaSpacing.large),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            InstaText(text: '${context.appLocalization.dontHaveAnAccount} '),
+            InkWell(
+              onTap: () {
+                context.goNamed(TodoRouteName.register);
+              },
+              child: InstaText(
+                text: context.appLocalization.signUp,
+              ),
             ),
-          ),
-        ],
-      );
+          ],
+        )
+      ],
+    );
+  }
 }
