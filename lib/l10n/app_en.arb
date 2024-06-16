@@ -1,0 +1,17 @@
+{
+    "appTitle": "Taskzilla",
+
+    "registerSubHeader": "Curabitur non elit ut libero tristique sodales. Mauris a lacus. Donec mattis semper leo.",
+    "registerLearnMore": "Morbi vestibulum volutpat enim. Duis lobortis. In turpis. Donec at ante non massa id feugiat.",
+    "registerPolicy": "Mauris eget neque at sem venenatis eleifend.",
+
+    "email":"Email",
+    "fullName": "Full Name",
+    "userName": "Username",
+    "password": "Password",
+    "signUp": "Sign up",
+    "haveAnAccount": "Have an account?",
+    "login": "Log in",
+    "userNameOrEmail": "Username or email",
+    "dontHaveAnAccount": "Don't have an account?"
+}
