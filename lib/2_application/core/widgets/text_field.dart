@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class InstaTextField extends StatefulWidget {
+class TodoTextField extends StatefulWidget {
   TextEditingController? controller;
   final String label;
   final bool obscureText;
@@ -12,7 +12,7 @@ class InstaTextField extends StatefulWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final Function(String)? onChanged;
-  InstaTextField({
+  TodoTextField({
     this.controller,
     super.key,
     required this.label,
@@ -26,10 +26,10 @@ class InstaTextField extends StatefulWidget {
   });
 
   @override
-  State<InstaTextField> createState() => _InstaTextFieldState();
+  State<TodoTextField> createState() => _TodoTextFieldState();
 }
 
-class _InstaTextFieldState extends State<InstaTextField> {
+class _TodoTextFieldState extends State<TodoTextField> {
   @override
   void initState() {
     super.initState();

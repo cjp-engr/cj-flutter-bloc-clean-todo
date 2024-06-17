@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
 import 'package:frontend/2_application/core/extension/bloc_api_status.dart';
+import 'package:frontend/2_application/core/widgets/progress_indicator.dart';
 import 'package:frontend/2_application/pages/register/bloc/register_bloc.dart';
 import 'package:frontend/2_application/core/routes/route_name.dart';
 import 'package:frontend/2_application/core/utils/build_context_ext.dart';
@@ -57,15 +58,10 @@ class _RegisterPageState extends State<RegisterPage> {
     return BlocBuilder<RegisterBloc, RegisterState>(
       builder: (context, state) {
         if (state.status == BlocStatus.loading) {
-          return const CircularProgressIndicator();
+          return const TodoProgressIndicator();
         }
         if (state.status == BlocStatus.error) {
           return const Text('test you cannot register, sorry');
-        }
-        if (state.status == BlocStatus.success) {
-          return const InstaText(
-            text: 'I am successfully login',
-          );
         }
         return TodoAppBar(
           body: GestureDetector(
@@ -90,22 +86,22 @@ class _RegisterPageState extends State<RegisterPage> {
                       text: context.appLocalization.registerSubHeader,
                     ),
                     const SizedBox(height: InstaSpacing.extraLarge),
-                    InstaTextField(
+                    TodoTextField(
                       label: context.appLocalization.email,
                       controller: _emailController,
                     ),
                     const SizedBox(height: InstaSpacing.small),
-                    InstaTextField(
+                    TodoTextField(
                       label: context.appLocalization.fullName,
                       controller: _fullNameController,
                     ),
                     const SizedBox(height: InstaSpacing.small),
-                    InstaTextField(
+                    TodoTextField(
                       label: context.appLocalization.userName,
                       controller: _userNameController,
                     ),
                     const SizedBox(height: InstaSpacing.small),
-                    InstaTextField(
+                    TodoTextField(
                       label: context.appLocalization.password,
                       controller: _passwordController,
                       obscureText: true,
@@ -162,7 +158,7 @@ class _HeaderWidget extends StatelessWidget {
           IconConst.todo,
           scale: 1,
         ),
-        InstaText(
+        TodoText(
           text: context.appLocalization.appTitle,
           fontSize: InstaFontSize.extraLarge,
           fontWeight: FontWeight.bold,
@@ -180,7 +176,7 @@ class _DetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InstaText(
+    return TodoText(
       text: text,
     );
   }
@@ -206,12 +202,12 @@ class _ButtonsWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            InstaText(text: '${context.appLocalization.haveAnAccount} '),
+            TodoText(text: '${context.appLocalization.haveAnAccount} '),
             InkWell(
               onTap: () {
                 context.goNamed(TodoRouteName.login);
               },
-              child: InstaText(text: context.appLocalization.login),
+              child: TodoText(text: context.appLocalization.login),
             ),
           ],
         )

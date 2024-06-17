@@ -15,8 +15,4 @@ class RegisterUserUC implements UseCase<UserEntity, dynamic> {
       return Left(GeneralFailure());
     }
   }
-
-  // Future<Either<Failure, UserEntity>> call(UserEntity user) async {
-  //   return userRepo.registerUserToDataSource();
-  // }
 }

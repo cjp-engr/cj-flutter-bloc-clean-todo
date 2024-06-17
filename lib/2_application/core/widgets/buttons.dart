@@ -111,7 +111,7 @@ class TertiaryButton extends StatelessWidget {
                 : Row(
                     children: [
                       const SizedBox(width: InstaSpacing.verySmall),
-                      InstaText(
+                      TodoText(
                         text: text,
                         color: applyColor[InstaColor.tertiary],
                         fontWeight: FontWeight.bold,

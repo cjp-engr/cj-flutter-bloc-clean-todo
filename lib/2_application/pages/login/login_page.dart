@@ -59,12 +59,12 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: InstaSpacing.small),
                 const _HeaderWidget(),
                 const SizedBox(height: InstaSpacing.extraLarge),
-                InstaTextField(
+                TodoTextField(
                   label: context.appLocalization.userNameOrEmail,
                   controller: _emailController,
                 ),
                 const SizedBox(height: InstaSpacing.small),
-                InstaTextField(
+                TodoTextField(
                   label: context.appLocalization.password,
                   obscureText: true,
                   controller: _passwordController,
@@ -102,7 +102,7 @@ class _HeaderWidget extends StatelessWidget {
           IconConst.todo,
           scale: 1,
         ),
-        InstaText(
+        TodoText(
           text: context.appLocalization.appTitle,
           fontSize: InstaFontSize.extraLarge,
           fontWeight: FontWeight.bold,
@@ -132,12 +132,12 @@ class _ButtonsWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            InstaText(text: '${context.appLocalization.dontHaveAnAccount} '),
+            TodoText(text: '${context.appLocalization.dontHaveAnAccount} '),
             InkWell(
               onTap: () {
                 context.goNamed(TodoRouteName.register);
               },
-              child: InstaText(
+              child: TodoText(
                 text: context.appLocalization.signUp,
               ),
             ),

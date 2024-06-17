@@ -3,14 +3,14 @@ import 'package:frontend/2_application/core/constants/font_size.dart';
 
 const String _fontFamily = 'Poppins';
 
-class InstaText extends StatelessWidget {
+class TodoText extends StatelessWidget {
   final String text;
   final double fontSize;
   final FontWeight fontWeight;
   final Color? color;
   final int? maxLines;
   final TextAlign? textAlign;
-  const InstaText({
+  const TodoText({
     super.key,
     required this.text,
     this.fontSize = InstaFontSize.medium,
