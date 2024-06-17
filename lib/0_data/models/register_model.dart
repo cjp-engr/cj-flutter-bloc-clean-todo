@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:frontend/1_domain/entities/user_entity.dart';
 
-class UserModel extends UserEntity with EquatableMixin {
-  UserModel({
+class RegisterModel extends UserEntity with EquatableMixin {
+  RegisterModel({
     required super.id,
     required super.email,
     required super.fullName,
@@ -11,8 +11,8 @@ class UserModel extends UserEntity with EquatableMixin {
   });
 
   //TODO: UserModel
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
+  factory RegisterModel.fromJson(Map<String, dynamic> json) {
+    return RegisterModel(
       id: json[''],
       email: json[''],
       fullName: json[''],

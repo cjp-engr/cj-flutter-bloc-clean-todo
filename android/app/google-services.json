@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "152964456413",
+    "project_id": "cj-flutter-bloc-todo-clean",
+    "storage_bucket": "cj-flutter-bloc-todo-clean.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152964456413:android:e751bd80d245aac12ea034",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi6MqOrQo78U-ytAoH5JfexW9uO0156Zk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

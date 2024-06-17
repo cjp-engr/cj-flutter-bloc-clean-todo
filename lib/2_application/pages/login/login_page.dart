@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return InstaAppBar(
+    return TodoAppBar(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Padding(

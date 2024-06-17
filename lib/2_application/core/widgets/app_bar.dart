@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 
 // ignore: must_be_immutable
-class InstaAppBar extends StatelessWidget implements PreferredSizeWidget {
+class TodoAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? appBarLeading;
   final Widget? appBarTitle;
   final Widget? floatingActionButton;
 
   final Widget? body;
   List<Widget>? appBarActions;
-  InstaAppBar({
+  TodoAppBar({
     super.key,
     this.appBarLeading,
     this.appBarTitle,

@@ -1,18 +1,26 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:frontend/2_application/core/routes/routes.dart';
 import 'package:frontend/2_application/core/services/theme_service.dart';
+import 'package:frontend/firebase_options.dart';
 import 'package:frontend/theme.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await _initializeFirebase();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeService(),
       child: const MyApp(),
     ),
   );
+}
+
+Future<void> _initializeFirebase() async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 
 class MyApp extends StatelessWidget {

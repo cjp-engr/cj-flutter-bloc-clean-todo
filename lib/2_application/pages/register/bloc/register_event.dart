@@ -1,23 +1,21 @@
-import 'package:equatable/equatable.dart';
+part of 'register_bloc.dart';
 
-class UserEntity extends Equatable {
-  final String? id;
+sealed class RegisterEvent extends Equatable {}
+
+class UserRegisterSubmitEvent extends RegisterEvent {
   final String email;
   final String fullName;
   final String username;
   final String password;
 
-  const UserEntity({
-    this.id,
+  UserRegisterSubmitEvent({
     required this.email,
     required this.fullName,
     required this.username,
     required this.password,
   });
-
   @override
   List<Object?> get props => [
-        id,
         email,
         fullName,
         username,

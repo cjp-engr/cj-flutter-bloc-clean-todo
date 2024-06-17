@@ -26,7 +26,7 @@ GoRoute _register() {
     path: '/${TodoRouteName.register}',
     name: TodoRouteName.register,
     pageBuilder: (context, state) => const NoTransitionPage(
-      child: RegisterPage(),
+      child: RegisterPageWrapperProvider(),
     ),
   );
 }

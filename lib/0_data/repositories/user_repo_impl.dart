@@ -9,9 +9,11 @@ class UserRepoImpl implements UserRepo {
   final UserRemoteDatasource userRemoteDatasource = UserRemoteDatasourceImpl();
 
   @override
-  Future<Either<Failure, UserEntity>> registerUser() async {
+  Future<Either<Failure, UserEntity>> registerUserToDataSource(
+      UserEntity user) async {
     try {
-      final result = await userRemoteDatasource.registerUserInfo();
+      final result =
+          await userRemoteDatasource.registerUserInfoToDatabase(user);
       return right(result);
     } on ServerException catch (_) {
       return left(ServerFailure());

@@ -1,0 +1,13 @@
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+
+part 'all_todos_event.dart';
+part 'all_todos_state.dart';
+
+class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
+  AllTodosBloc() : super(AllTodosInitial()) {
+    on<AllTodosEvent>((event, emit) {
+      // TODO: implement event handler
+    });
+  }
+}
