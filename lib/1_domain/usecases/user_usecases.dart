@@ -16,3 +16,16 @@ class RegisterUserUC implements UseCase<UserEntity, dynamic> {
     }
   }
 }
+
+class LoggedInUserUC implements UseCase<UserEntity, dynamic> {
+  final userRepo = UserRepoImpl();
+
+  @override
+  Future<Either<Failure, dynamic>> call(UserEntity user) async {
+    try {
+      return await userRepo.loggedInExistingUserFromDataSource(user);
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
+  }
+}

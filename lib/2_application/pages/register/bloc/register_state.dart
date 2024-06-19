@@ -26,15 +26,6 @@ class RegisterState extends Equatable {
     );
   }
 
-  @override
-  List<Object> get props => [
-        status,
-        email,
-        fullName,
-        username,
-        password,
-      ];
-
   RegisterState copyWith({
     BlocStatus? status,
     String? email,
@@ -50,4 +41,13 @@ class RegisterState extends Equatable {
       password: password ?? this.password,
     );
   }
+
+  @override
+  List<Object> get props => [
+        status,
+        email,
+        fullName,
+        username,
+        password,
+      ];
 }

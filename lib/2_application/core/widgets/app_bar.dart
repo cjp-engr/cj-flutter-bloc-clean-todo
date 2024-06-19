@@ -9,6 +9,8 @@ class TodoAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final Widget? body;
   List<Widget>? appBarActions;
+
+  final bool? isAppBarScrollable;
   TodoAppBar({
     super.key,
     this.appBarLeading,
@@ -16,31 +18,36 @@ class TodoAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.floatingActionButton,
     this.body,
     this.appBarActions,
+    this.isAppBarScrollable,
   });
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: DefaultTabController(
-          length: 2,
-          child: NestedScrollView(
-            headerSliverBuilder: (context, value) {
-              return [];
-            },
-            body: AdaptiveLayout(
-              body: SlotLayout(
-                config: <Breakpoint, SlotLayoutConfig>{
-                  Breakpoints.small: SlotLayout.from(
-                    key: const Key('smallBody'),
-                    builder: (_) => SingleChildScrollView(child: body!),
-                  ),
-                  Breakpoints.mediumAndUp: SlotLayout.from(
-                    key: const Key('mediumAndUpBody'),
-                    builder: (_) => SingleChildScrollView(child: body!),
-                  ),
-                },
+        body: NestedScrollView(
+          headerSliverBuilder: (context, value) {
+            return [
+              SliverAppBar(
+                leading: appBarLeading,
+                title: appBarTitle,
+                actions: appBarActions,
+                pinned: true,
               ),
+            ];
+          },
+          body: AdaptiveLayout(
+            body: SlotLayout(
+              config: <Breakpoint, SlotLayoutConfig>{
+                Breakpoints.small: SlotLayout.from(
+                  key: const Key('smallBody'),
+                  builder: (_) => SingleChildScrollView(child: body),
+                ),
+                Breakpoints.mediumAndUp: SlotLayout.from(
+                  key: const Key('mediumAndUpBody'),
+                  builder: (_) => SingleChildScrollView(child: body),
+                ),
+              },
             ),
           ),
         ),

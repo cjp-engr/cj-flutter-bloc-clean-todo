@@ -56,7 +56,7 @@ class SecondaryButton extends StatelessWidget {
       child: Image.asset(
         assetName,
         scale: scale ?? 2.7,
-        color: color ?? applyColor[InstaColor.tertiary],
+        color: TodoColor.lightTextColorPrimary,
       ),
     );
   }

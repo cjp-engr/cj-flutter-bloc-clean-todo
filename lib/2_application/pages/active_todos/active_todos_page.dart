@@ -10,11 +10,11 @@ class ActiveTodosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TodoAppBar(
-      appBarTitle: const TodoText(text: 'All Todos'),
+      appBarTitle: const TodoText(text: 'Active Todos'),
       appBarActions: [
         SecondaryButton(
           onPressed: () {},
-          assetName: IconConst.logout,
+          assetName: IconConst.setting,
         ),
       ],
     );

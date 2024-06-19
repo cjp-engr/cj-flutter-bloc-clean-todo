@@ -7,6 +7,7 @@ import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
 import 'package:frontend/2_application/core/extension/bloc_api_status.dart';
 import 'package:frontend/2_application/core/widgets/progress_indicator.dart';
+import 'package:frontend/2_application/pages/login/cubit/login_cubit.dart';
 import 'package:frontend/2_application/pages/register/bloc/register_bloc.dart';
 import 'package:frontend/2_application/core/routes/route_name.dart';
 import 'package:frontend/2_application/core/utils/build_context_ext.dart';
@@ -55,7 +56,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterBloc, RegisterState>(
+    return BlocConsumer<RegisterBloc, RegisterState>(
+      listener: (context, state) {
+        if (state.status == BlocStatus.success) {
+          context.goNamed(TodoRouteName.allTodo);
+          BlocProvider.of<LoginCubit>(context).isLoggedIn();
+        }
+      },
       builder: (context, state) {
         if (state.status == BlocStatus.loading) {
           return const TodoProgressIndicator();

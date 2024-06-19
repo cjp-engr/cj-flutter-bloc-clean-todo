@@ -14,7 +14,7 @@ class AllTodosPage extends StatelessWidget {
       appBarActions: [
         SecondaryButton(
           onPressed: () {},
-          assetName: IconConst.logout,
+          assetName: IconConst.setting,
         ),
       ],
     );
