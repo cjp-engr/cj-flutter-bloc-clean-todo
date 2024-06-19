@@ -6,7 +6,9 @@ import 'package:frontend/1_domain/failures/failures.dart';
 import 'package:frontend/1_domain/repositories/user_repo.dart';
 
 class UserRepoImpl implements UserRepo {
-  final UserRemoteDatasource userRemoteDatasource = UserRemoteDatasourceImpl();
+  final UserRemoteDatasource userRemoteDatasource;
+
+  UserRepoImpl({required this.userRemoteDatasource});
 
   @override
   Future<Either<Failure, UserEntity>> registerUserToDataSource(

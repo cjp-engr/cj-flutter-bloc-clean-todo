@@ -8,8 +8,8 @@ part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  final RegisterUserUC userUC = RegisterUserUC();
-  RegisterBloc() : super(RegisterState.initialState()) {
+  final RegisterUserUC userUC;
+  RegisterBloc({required this.userUC}) : super(RegisterState.initialState()) {
     on<UserRegisterSubmitEvent>(_registerUser);
   }
 

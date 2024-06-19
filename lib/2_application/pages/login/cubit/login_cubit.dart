@@ -7,8 +7,9 @@ import 'package:frontend/2_application/core/extension/bloc_api_status.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  final LoggedInUserUC userUC = LoggedInUserUC();
-  LoginCubit() : super(LoginState.initialState());
+  // final LoggedInUserUC userUC = LoggedInUserUC();
+  final LoggedInUserUC userUC;
+  LoginCubit({required this.userUC}) : super(LoginState.initialState());
 
   void loggedInUser(
     String email,

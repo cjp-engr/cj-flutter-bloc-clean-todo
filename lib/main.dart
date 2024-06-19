@@ -7,9 +7,11 @@ import 'package:frontend/2_application/core/services/theme_service.dart';
 import 'package:frontend/firebase_options.dart';
 import 'package:frontend/theme.dart';
 import 'package:provider/provider.dart';
+import 'injection.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   await _initializeFirebase();
   runApp(
     ChangeNotifierProvider(

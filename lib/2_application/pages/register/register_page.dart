@@ -16,6 +16,7 @@ import 'package:frontend/2_application/core/widgets/app_bar.dart';
 import 'package:frontend/2_application/core/widgets/buttons.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
+import 'package:frontend/injection.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterPageWrapperProvider extends StatelessWidget {
@@ -23,8 +24,15 @@ class RegisterPageWrapperProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => RegisterBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => sl<RegisterBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => sl<LoginCubit>(),
+        )
+      ],
       child: const RegisterPage(),
     );
   }

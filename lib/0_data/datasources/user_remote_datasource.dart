@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:frontend/0_data/exceptions/exceptions.dart';
 import 'package:frontend/0_data/models/login_model.dart';
 import 'package:frontend/0_data/models/register_model.dart';
@@ -11,6 +12,9 @@ abstract class UserRemoteDatasource {
 }
 
 class UserRemoteDatasourceImpl implements UserRemoteDatasource {
+  final FirebaseAuth fbAuth;
+
+  UserRemoteDatasourceImpl({required this.fbAuth});
   @override
   Future<RegisterModel> registerUserInfoToDatabase(UserEntity user) async {
     try {

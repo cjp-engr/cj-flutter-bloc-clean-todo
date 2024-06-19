@@ -13,6 +13,7 @@ import 'package:frontend/2_application/core/widgets/progress_indicator.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
 import 'package:frontend/2_application/pages/login/cubit/login_cubit.dart';
+import 'package:frontend/injection.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginPageWrapperProvider extends StatelessWidget {
@@ -21,7 +22,7 @@ class LoginPageWrapperProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(),
+      create: (context) => sl<LoginCubit>(),
       child: const LoginPage(),
     );
   }

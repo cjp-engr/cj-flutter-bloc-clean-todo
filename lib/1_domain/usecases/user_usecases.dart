@@ -1,11 +1,13 @@
 import 'package:dartz/dartz.dart';
-import 'package:frontend/0_data/repositories/user_repo_impl.dart';
 import 'package:frontend/1_domain/entities/user_entity.dart';
 import 'package:frontend/1_domain/failures/failures.dart';
+import 'package:frontend/1_domain/repositories/user_repo.dart';
 import 'package:frontend/1_domain/usecases/base_use_case/use_case.dart';
 
 class RegisterUserUC implements UseCase<UserEntity, dynamic> {
-  final userRepo = UserRepoImpl();
+  final UserRepo userRepo;
+
+  RegisterUserUC({required this.userRepo});
 
   @override
   Future<Either<Failure, dynamic>> call(UserEntity user) async {
@@ -18,7 +20,9 @@ class RegisterUserUC implements UseCase<UserEntity, dynamic> {
 }
 
 class LoggedInUserUC implements UseCase<UserEntity, dynamic> {
-  final userRepo = UserRepoImpl();
+  final UserRepo userRepo;
+
+  LoggedInUserUC({required this.userRepo});
 
   @override
   Future<Either<Failure, dynamic>> call(UserEntity user) async {
