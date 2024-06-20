@@ -30,6 +30,8 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
   patrol: ^3.8.0
 
 patrol:

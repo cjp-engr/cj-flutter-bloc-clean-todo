@@ -76,11 +76,13 @@ class _LoginPageState extends State<LoginPage> {
                     const _HeaderWidget(),
                     const SizedBox(height: InstaSpacing.extraLarge),
                     TodoTextField(
+                      key: const Key('testEmail'),
                       label: context.appLocalization.userNameOrEmail,
                       controller: _emailController,
                     ),
                     const SizedBox(height: InstaSpacing.small),
                     TodoTextField(
+                      key: const Key('testPassword'),
                       label: context.appLocalization.password,
                       obscureText: true,
                       controller: _passwordController,
@@ -146,6 +148,7 @@ class _ButtonsWidget extends StatelessWidget {
     return Column(
       children: [
         PrimaryButton(
+          key: const Key('testButton'),
           width: double.infinity,
           text: context.appLocalization.login,
           onPressed: onPress,

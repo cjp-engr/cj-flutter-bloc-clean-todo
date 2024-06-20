@@ -13,8 +13,8 @@ class TodoTextField extends StatefulWidget {
   final Widget? suffixIcon;
   final Function(String)? onChanged;
   TodoTextField({
-    this.controller,
     super.key,
+    this.controller,
     required this.label,
     this.obscureText = false,
     this.maxLines = 1,
@@ -39,6 +39,7 @@ class _TodoTextFieldState extends State<TodoTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      key: widget.key,
       controller: widget.controller,
       obscureText: widget.obscureText,
       maxLines: widget.maxLines,

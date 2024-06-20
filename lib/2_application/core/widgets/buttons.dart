@@ -26,6 +26,7 @@ class PrimaryButton extends StatelessWidget {
       width: width ?? 110,
       height: height ?? context.screenHeight * 0.055,
       child: ElevatedButton(
+        key: key,
         onPressed: onPressed,
         child: Text(
           text,
