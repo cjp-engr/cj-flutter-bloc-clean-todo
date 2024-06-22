@@ -18,6 +18,7 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       color: TodoColor.lightPrimaryColor,
       iconTheme: IconThemeData(color: TodoColor.iconColor),
+      scrolledUnderElevation: 0,
     ),
     bottomAppBarTheme: BottomAppBarTheme(
       color: TodoColor.appbarColorLight,
@@ -57,13 +58,13 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       floatingLabelBehavior: FloatingLabelBehavior.always,
       contentPadding: const EdgeInsets.symmetric(
-        vertical: InstaSpacing.extraSmall,
-        horizontal: InstaSpacing.verySmall,
+        vertical: TodoSpacing.extraSmall,
+        horizontal: TodoSpacing.verySmall,
       ),
       alignLabelWithHint: true,
       enabledBorder: OutlineInputBorder(
         borderRadius: const BorderRadius.all(
-          Radius.circular(InstaBorderRadius.small),
+          Radius.circular(TodoBorderRadius.small),
         ),
         borderSide: BorderSide(
           color: TodoColor.lightPrimaryVariantColor,
@@ -71,7 +72,7 @@ class AppTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: const BorderRadius.all(
-          Radius.circular(InstaBorderRadius.verySmall),
+          Radius.circular(TodoBorderRadius.verySmall),
         ),
         borderSide: BorderSide(
           color: TodoColor.lightPrimaryVariantColor,
@@ -80,18 +81,18 @@ class AppTheme {
       hintStyle: const TextStyle(
         fontFamily: _fontFamily,
         fontWeight: FontWeight.bold,
-        fontSize: InstaFontSize.medium,
+        fontSize: TodoFontSize.medium,
       ),
       floatingLabelStyle: TextStyle(
         fontFamily: _fontFamily,
         fontWeight: FontWeight.bold,
-        fontSize: InstaFontSize.medium,
+        fontSize: TodoFontSize.medium,
         color: TodoColor.lightPrimaryVariantColor,
       ),
       labelStyle: TextStyle(
         fontFamily: _fontFamily,
         fontWeight: FontWeight.bold,
-        fontSize: InstaFontSize.medium,
+        fontSize: TodoFontSize.medium,
         color: TodoColor.lightPrimaryVariantColor,
       ),
     ),
@@ -100,19 +101,19 @@ class AppTheme {
         color: TodoColor.lightPrimaryVariantColor,
         fontFamily: _fontFamily,
         fontWeight: FontWeight.bold,
-        fontSize: InstaFontSize.medium,
+        fontSize: TodoFontSize.medium,
       ),
       bodyMedium: TextStyle(
         color: TodoColor.lightPrimaryVariantColor,
         fontFamily: _fontFamily,
         fontWeight: FontWeight.bold,
-        fontSize: InstaFontSize.medium,
+        fontSize: TodoFontSize.medium,
       ),
       bodyLarge: TextStyle(
         color: TodoColor.lightPrimaryVariantColor,
         fontFamily: _fontFamily,
         fontWeight: FontWeight.bold,
-        fontSize: InstaFontSize.medium,
+        fontSize: TodoFontSize.medium,
       ),
       // labelSmall: TextStyle(color: Colors.red),
       // labelMedium: TextStyle(color: Colors.red),

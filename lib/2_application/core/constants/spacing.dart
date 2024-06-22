@@ -1,4 +1,4 @@
-class InstaSpacing {
+class TodoSpacing {
   static const double tiny = 5;
   static const double extraSmall = 8;
   static const double verySmall = 12;

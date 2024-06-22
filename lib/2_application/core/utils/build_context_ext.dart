@@ -7,7 +7,7 @@ extension BuildContextExtension on BuildContext {
   double get screenHeight => MediaQuery.of(this).size.height;
   double get screenWidth => MediaQuery.of(this).size.width;
   double get padding => Breakpoints.small.isActive(this)
-      ? InstaSpacing.small
+      ? TodoSpacing.small
       : Breakpoints.medium.isActive(this)
           ? screenWidth * 0.12
           : screenWidth * 0.3;

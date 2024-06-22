@@ -13,7 +13,7 @@ class TodoText extends StatelessWidget {
   const TodoText({
     super.key,
     required this.text,
-    this.fontSize = InstaFontSize.medium,
+    this.fontSize = TodoFontSize.medium,
     this.fontWeight = FontWeight.normal,
     this.color,
     this.maxLines,

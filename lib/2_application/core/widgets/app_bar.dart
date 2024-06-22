@@ -1,5 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+
+import 'package:frontend/2_application/core/utils/build_context_ext.dart';
 
 // ignore: must_be_immutable
 class TodoAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -10,7 +13,7 @@ class TodoAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? body;
   List<Widget>? appBarActions;
 
-  final bool? isAppBarScrollable;
+  bool isNestedScrollView;
   TodoAppBar({
     super.key,
     this.appBarLeading,
@@ -18,37 +21,31 @@ class TodoAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.floatingActionButton,
     this.body,
     this.appBarActions,
-    this.isAppBarScrollable,
+    this.isNestedScrollView = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: NestedScrollView(
-          headerSliverBuilder: (context, value) {
-            return [
-              SliverAppBar(
-                leading: appBarLeading,
-                title: appBarTitle,
-                actions: appBarActions,
-                pinned: true,
+        floatingActionButton: floatingActionButton,
+        appBar: AppBar(
+          leading: appBarLeading,
+          title: appBarTitle,
+          actions: [...appBarActions ?? [], SizedBox(width: context.padding)],
+        ),
+        body: AdaptiveLayout(
+          body: SlotLayout(
+            config: <Breakpoint, SlotLayoutConfig>{
+              Breakpoints.small: SlotLayout.from(
+                key: const Key('smallBody'),
+                builder: (_) => body ?? const SizedBox(),
               ),
-            ];
-          },
-          body: AdaptiveLayout(
-            body: SlotLayout(
-              config: <Breakpoint, SlotLayoutConfig>{
-                Breakpoints.small: SlotLayout.from(
-                  key: const Key('smallBody'),
-                  builder: (_) => SingleChildScrollView(child: body),
-                ),
-                Breakpoints.mediumAndUp: SlotLayout.from(
-                  key: const Key('mediumAndUpBody'),
-                  builder: (_) => SingleChildScrollView(child: body),
-                ),
-              },
-            ),
+              Breakpoints.mediumAndUp: SlotLayout.from(
+                key: const Key('mediumAndUpBody'),
+                builder: (_) => SingleChildScrollView(child: body!),
+              ),
+            },
           ),
         ),
       ),

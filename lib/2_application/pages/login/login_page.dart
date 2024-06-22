@@ -57,14 +57,15 @@ class _LoginPageState extends State<LoginPage> {
           return const Text('test you cannot register, sorry');
         }
         return TodoAppBar(
+          isNestedScrollView: true,
           body: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: context.padding +
                       (Breakpoints.small.isActive(context)
-                          ? InstaSpacing.verySmall
-                          : InstaSpacing.small)),
+                          ? TodoSpacing.verySmall
+                          : TodoSpacing.small)),
               child: Form(
                 key: _formKey,
                 autovalidateMode: _autovalidateMode,
@@ -72,23 +73,23 @@ class _LoginPageState extends State<LoginPage> {
                   shrinkWrap: true,
                   reverse: true,
                   children: [
-                    const SizedBox(height: InstaSpacing.small),
+                    const SizedBox(height: TodoSpacing.small),
                     const _HeaderWidget(),
-                    const SizedBox(height: InstaSpacing.extraLarge),
+                    const SizedBox(height: TodoSpacing.extraLarge),
                     TodoTextField(
                       key: const Key('testEmail'),
                       label: context.appLocalization.userNameOrEmail,
                       controller: _emailController,
                     ),
-                    const SizedBox(height: InstaSpacing.small),
+                    const SizedBox(height: TodoSpacing.small),
                     TodoTextField(
                       key: const Key('testPassword'),
                       label: context.appLocalization.password,
                       obscureText: true,
                       controller: _passwordController,
                     ),
-                    const SizedBox(height: InstaSpacing.medium),
-                    const SizedBox(height: InstaSpacing.extraLarge * 4),
+                    const SizedBox(height: TodoSpacing.medium),
+                    const SizedBox(height: TodoSpacing.extraLarge * 4),
                     _ButtonsWidget(onPress: () => _submit()),
                   ].reversed.toList(),
                 ),
@@ -129,7 +130,7 @@ class _HeaderWidget extends StatelessWidget {
         ),
         TodoText(
           text: context.appLocalization.appTitle,
-          fontSize: InstaFontSize.extraLarge,
+          fontSize: TodoFontSize.extraLarge,
           fontWeight: FontWeight.bold,
         ),
       ],
@@ -153,7 +154,7 @@ class _ButtonsWidget extends StatelessWidget {
           text: context.appLocalization.login,
           onPressed: onPress,
         ),
-        const SizedBox(height: InstaSpacing.large),
+        const SizedBox(height: TodoSpacing.large),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,

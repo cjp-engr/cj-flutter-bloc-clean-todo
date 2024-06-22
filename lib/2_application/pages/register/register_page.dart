@@ -79,14 +79,15 @@ class _RegisterPageState extends State<RegisterPage> {
           return const Text('test you cannot register, sorry');
         }
         return TodoAppBar(
+          isNestedScrollView: true,
           body: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: context.padding +
                       (Breakpoints.small.isActive(context)
-                          ? InstaSpacing.verySmall
-                          : InstaSpacing.small)),
+                          ? TodoSpacing.verySmall
+                          : TodoSpacing.small)),
               child: Form(
                 key: _formKey,
                 autovalidateMode: _autovalidateMode,
@@ -94,42 +95,42 @@ class _RegisterPageState extends State<RegisterPage> {
                   shrinkWrap: true,
                   reverse: true,
                   children: [
-                    const SizedBox(height: InstaSpacing.small),
+                    const SizedBox(height: TodoSpacing.small),
                     const _HeaderWidget(),
-                    const SizedBox(height: InstaSpacing.veryLarge),
+                    const SizedBox(height: TodoSpacing.veryLarge),
                     _DetailWidget(
                       text: context.appLocalization.registerSubHeader,
                     ),
-                    const SizedBox(height: InstaSpacing.extraLarge),
+                    const SizedBox(height: TodoSpacing.extraLarge),
                     TodoTextField(
                       label: context.appLocalization.email,
                       controller: _emailController,
                     ),
-                    const SizedBox(height: InstaSpacing.small),
+                    const SizedBox(height: TodoSpacing.small),
                     TodoTextField(
                       label: context.appLocalization.fullName,
                       controller: _fullNameController,
                     ),
-                    const SizedBox(height: InstaSpacing.small),
+                    const SizedBox(height: TodoSpacing.small),
                     TodoTextField(
                       label: context.appLocalization.userName,
                       controller: _userNameController,
                     ),
-                    const SizedBox(height: InstaSpacing.small),
+                    const SizedBox(height: TodoSpacing.small),
                     TodoTextField(
                       label: context.appLocalization.password,
                       controller: _passwordController,
                       obscureText: true,
                     ),
-                    const SizedBox(height: InstaSpacing.small),
+                    const SizedBox(height: TodoSpacing.small),
                     _DetailWidget(
                       text: context.appLocalization.registerLearnMore,
                     ),
-                    const SizedBox(height: InstaSpacing.small),
+                    const SizedBox(height: TodoSpacing.small),
                     _DetailWidget(
                       text: context.appLocalization.registerPolicy,
                     ),
-                    const SizedBox(height: InstaSpacing.small),
+                    const SizedBox(height: TodoSpacing.small),
                     _ButtonsWidget(
                       onPress: () => _submit(),
                     ),
@@ -175,7 +176,7 @@ class _HeaderWidget extends StatelessWidget {
         ),
         TodoText(
           text: context.appLocalization.appTitle,
-          fontSize: InstaFontSize.extraLarge,
+          fontSize: TodoFontSize.extraLarge,
           fontWeight: FontWeight.bold,
         ),
       ],
@@ -212,7 +213,7 @@ class _ButtonsWidget extends StatelessWidget {
           text: context.appLocalization.signUp,
           onPressed: onPress,
         ),
-        const SizedBox(height: InstaSpacing.large),
+        const SizedBox(height: TodoSpacing.large),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,

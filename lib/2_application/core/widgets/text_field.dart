@@ -38,14 +38,17 @@ class _TodoTextFieldState extends State<TodoTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      key: widget.key,
-      controller: widget.controller,
-      obscureText: widget.obscureText,
-      maxLines: widget.maxLines,
-      onChanged: _onChanged,
-      decoration: InputDecoration(
-        hintText: widget.label,
+    return SizedBox(
+      width: double.infinity,
+      child: TextFormField(
+        key: widget.key,
+        controller: widget.controller,
+        obscureText: widget.obscureText,
+        maxLines: widget.maxLines,
+        onChanged: _onChanged,
+        decoration: InputDecoration(
+          hintText: widget.label,
+        ),
       ),
     );
   }

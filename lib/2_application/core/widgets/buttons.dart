@@ -96,7 +96,7 @@ class TertiaryButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 5),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(InstaBorderRadius.small),
+            borderRadius: BorderRadius.circular(TodoBorderRadius.small),
           ),
         ),
         child: Row(
@@ -111,7 +111,7 @@ class TertiaryButton extends StatelessWidget {
                 ? const SizedBox()
                 : Row(
                     children: [
-                      const SizedBox(width: InstaSpacing.verySmall),
+                      const SizedBox(width: TodoSpacing.verySmall),
                       TodoText(
                         text: text,
                         color: applyColor[InstaColor.tertiary],
