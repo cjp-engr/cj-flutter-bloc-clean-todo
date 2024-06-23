@@ -64,7 +64,7 @@ StatefulShellBranch _allTodos() {
         path: '/${TodoRouteName.allTodo}',
         name: TodoRouteName.allTodo,
         pageBuilder: (context, state) => const NoTransitionPage(
-          child: AllTodosPage(),
+          child: AllTodosPageWrapperProvider(),
         ),
       ),
     ],

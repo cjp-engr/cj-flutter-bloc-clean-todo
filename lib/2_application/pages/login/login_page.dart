@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/1_domain/entities/user_entity.dart';
 import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
 import 'package:frontend/2_application/core/extension/bloc_api_status.dart';
@@ -111,8 +112,10 @@ class _LoginPageState extends State<LoginPage> {
     if (form == null || !form.validate()) return;
 
     BlocProvider.of<LoginCubit>(context).loggedInUser(
-      _emailController.text.trim(),
-      _passwordController.text.trim(),
+      UserEntity(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      ),
     );
   }
 }

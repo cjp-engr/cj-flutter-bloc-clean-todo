@@ -7,7 +7,6 @@ import 'package:frontend/2_application/core/widgets/buttons.dart';
 import 'package:frontend/2_application/core/widgets/dialog.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/todos/header.dart';
-import 'package:frontend/2_application/core/widgets/todos/list.dart';
 
 class CompletedTodosPage extends StatelessWidget {
   const CompletedTodosPage({super.key});
@@ -32,7 +31,7 @@ class CompletedTodosPage extends StatelessWidget {
           children: [
             HeaderWidget(),
             SizedBox(height: TodoSpacing.large),
-            ListWidget(),
+            // ListWidget(),
             SizedBox(height: TodoSpacing.large),
           ],
         ),

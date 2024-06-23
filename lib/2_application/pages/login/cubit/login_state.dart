@@ -3,39 +3,30 @@ part of 'login_cubit.dart';
 
 class LoginState extends Equatable {
   final BlocStatus status;
-  final String email;
-  final String password;
+  final UserEntity user;
 
   const LoginState({
     required this.status,
-    required this.email,
-    required this.password,
+    required this.user,
   });
 
   factory LoginState.initialState() {
     return const LoginState(
       status: BlocStatus.initial,
-      email: '',
-      password: '',
+      user: UserEntity(email: ''),
     );
   }
 
   LoginState copyWith({
     BlocStatus? status,
-    String? email,
-    String? password,
+    UserEntity? user,
   }) {
     return LoginState(
       status: status ?? this.status,
-      email: email ?? this.email,
-      password: password ?? this.password,
+      user: user ?? this.user,
     );
   }
 
   @override
-  List<Object?> get props => [
-        status,
-        email,
-        password,
-      ];
+  List<Object?> get props => [status, user];
 }

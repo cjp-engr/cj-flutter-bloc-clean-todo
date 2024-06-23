@@ -18,14 +18,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     Emitter<RegisterState> emit,
   ) async {
     emit(state.copyWith(status: BlocStatus.loading));
-    final failureOrSuccess = await userUC.call(
-      UserEntity(
-        email: event.email,
-        fullName: event.fullName,
-        username: event.username,
-        password: event.password,
-      ),
-    );
+    final failureOrSuccess = await userUC.call(event.user);
 
     failureOrSuccess.fold(
       (failure) => emit(

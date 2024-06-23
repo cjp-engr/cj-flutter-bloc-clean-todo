@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/1_domain/entities/user_entity.dart';
 
 import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
@@ -154,10 +155,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
     BlocProvider.of<RegisterBloc>(context).add(
       UserRegisterSubmitEvent(
-        email: _emailController.text.trim(),
-        fullName: _fullNameController.text.trim(),
-        username: _userNameController.text.trim(),
-        password: _passwordController.text.trim(),
+        user: UserEntity(
+          email: _emailController.text.trim(),
+          fullName: _fullNameController.text.trim(),
+          username: _userNameController.text.trim(),
+          password: _passwordController.text.trim(),
+        ),
       ),
     );
   }

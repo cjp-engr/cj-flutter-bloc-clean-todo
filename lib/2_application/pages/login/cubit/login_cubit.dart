@@ -11,18 +11,10 @@ class LoginCubit extends Cubit<LoginState> {
   final LoggedInUserUC userUC;
   LoginCubit({required this.userUC}) : super(LoginState.initialState());
 
-  void loggedInUser(
-    String email,
-    String password,
-  ) async {
+  void loggedInUser(UserEntity user) async {
     emit(state.copyWith(status: BlocStatus.loading));
 
-    final failureOrSuccess = await userUC.call(
-      UserEntity(
-        email: email,
-        password: password,
-      ),
-    );
+    final failureOrSuccess = await userUC.call(user);
 
     failureOrSuccess.fold(
       (failure) => emit(

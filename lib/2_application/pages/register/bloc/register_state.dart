@@ -3,51 +3,30 @@ part of 'register_bloc.dart';
 
 class RegisterState extends Equatable {
   final BlocStatus status;
-  final String email;
-  final String fullName;
-  final String username;
-  final String password;
+  final UserEntity user;
 
   const RegisterState({
     required this.status,
-    required this.email,
-    required this.fullName,
-    required this.username,
-    required this.password,
+    required this.user,
   });
 
   factory RegisterState.initialState() {
     return const RegisterState(
       status: BlocStatus.initial,
-      email: '',
-      fullName: '',
-      username: '',
-      password: '',
-    );
-  }
-
-  RegisterState copyWith({
-    BlocStatus? status,
-    String? email,
-    String? fullName,
-    String? username,
-    String? password,
-  }) {
-    return RegisterState(
-      status: status ?? this.status,
-      email: email ?? this.email,
-      fullName: fullName ?? this.fullName,
-      username: username ?? this.username,
-      password: password ?? this.password,
+      user: UserEntity(email: ''),
     );
   }
 
   @override
-  List<Object> get props => [
-        status,
-        email,
-        fullName,
-        username,
-        password,
-      ];
+  List<Object?> get props => [status, user];
+
+  RegisterState copyWith({
+    BlocStatus? status,
+    UserEntity? user,
+  }) {
+    return RegisterState(
+      status: status ?? this.status,
+      user: user ?? this.user,
+    );
+  }
 }

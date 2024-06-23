@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/1_domain/entities/todo_entity.dart';
 import 'package:frontend/2_application/core/widgets/dialog.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 
 class ListWidget extends StatelessWidget {
-  const ListWidget({super.key});
+  final List<TodoEntity> todos;
+  const ListWidget({super.key, required this.todos});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class ListWidget extends StatelessWidget {
       child: ListView.builder(
         physics: const ScrollPhysics(),
         shrinkWrap: true,
-        itemCount: 100,
+        itemCount: todos.length,
         itemBuilder: (context, index) => Dismissible(
           key: const ValueKey(100),
           confirmDismiss: (_) async => showDeleteDialog(context),
@@ -23,11 +25,16 @@ class ListWidget extends StatelessWidget {
                 buttonConfirmText: 'Edit',
               ),
               leading: Checkbox(
-                value: true,
+                value: todos[index].isCompleted,
                 onChanged: (bool? checked) {},
               ),
-              title: const TodoText(
-                text: 'I am a description',
+              title: TodoText(
+                text: todos[index].title,
+                textAlign: TextAlign.left,
+                fontWeight: FontWeight.bold,
+              ),
+              subtitle: TodoText(
+                text: todos[index].description,
                 textAlign: TextAlign.left,
               ),
             ),
