@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/2_application/core/routes/route_name.dart';
+import 'package:frontend/2_application/core/storage/secure_storage.dart';
 import 'package:frontend/2_application/core/widgets/navigation_bar.dart';
 import 'package:frontend/2_application/pages/active_todos/active_todos_page.dart';
 import 'package:frontend/2_application/pages/all_todos/all_todos_page.dart';
@@ -17,24 +19,35 @@ GlobalKey<NavigatorState> _shellNavigatorActiveTodosKey =
 GlobalKey<NavigatorState> _shellNavigatorCompletedTodosKey =
     GlobalKey<NavigatorState>(debugLabel: 'shellNavigatorCompletedTodosKey');
 
-final router = GoRouter(
-  initialLocation: '/${TodoRouteName.login}',
-  navigatorKey: _rootNavigatorKey,
-  routes: [
-    _login(),
-    _register(),
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) {
-        return TodoNavigationBar(navigationShell: navigationShell);
-      },
-      branches: [
-        _allTodos(),
-        _activeTodos(),
-        _completedTodos(),
-      ],
-    ),
-  ],
-);
+Future<GoRouter> routerFactory(FlutterSecureStorage storage) async {
+  return GoRouter(
+    initialLocation: '/${TodoRouteName.login}',
+    redirect: (context, state) async {
+      final accessToken =
+          await storage.read(key: SecureStorageKeys.accessToken);
+      if (accessToken?.isNotEmpty ?? false) {
+        return '/${TodoRouteName.allTodo}';
+      } else {
+        return '/${TodoRouteName.login}';
+      }
+    },
+    navigatorKey: _rootNavigatorKey,
+    routes: [
+      _login(),
+      _register(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return TodoNavigationBar(navigationShell: navigationShell);
+        },
+        branches: [
+          _allTodos(),
+          _activeTodos(),
+          _completedTodos(),
+        ],
+      ),
+    ],
+  );
+}
 
 GoRoute _login() {
   return GoRoute(

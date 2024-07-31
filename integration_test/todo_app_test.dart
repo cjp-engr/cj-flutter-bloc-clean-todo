@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:frontend/injection.dart';
 
 import 'package:frontend/main.dart';
 import 'package:patrol/patrol.dart';
@@ -10,10 +10,9 @@ void main() {
   patrolTest(
     'My test Taskzilla',
     ($) async {
-      WidgetsFlutterBinding.ensureInitialized();
       await di.init();
       await init_fb.initializeFirebase();
-      await $.pumpWidgetAndSettle(const MyApp());
+      await $.pumpWidgetAndSettle(MyApp(router: sl()));
       expect($('Taskzilla'), findsOneWidget);
       await $(#testEmail).enterText('c@c.com');
       await $(#testPassword).enterText('Test750!!');

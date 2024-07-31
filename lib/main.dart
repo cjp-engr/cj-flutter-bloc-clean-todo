@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:frontend/2_application/core/routes/routes.dart';
 import 'package:frontend/2_application/core/services/theme_service.dart';
+import 'package:frontend/injection.dart';
 import 'package:frontend/theme.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'injection.dart' as di;
 import 'package:frontend/3_core/utils/init_firebase.dart' as init_fb;
@@ -13,12 +14,13 @@ void main() async {
   await di.init();
   await init_fb.initializeFirebase();
   runApp(
-    const MyApp(),
+    MyApp(router: sl()),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GoRouter router;
+  const MyApp({super.key, required this.router});
 
   @override
   Widget build(BuildContext context) {

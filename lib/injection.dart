@@ -8,6 +8,7 @@ import 'package:frontend/1_domain/repositories/todo_repo.dart';
 import 'package:frontend/1_domain/repositories/user_repo.dart';
 import 'package:frontend/1_domain/usecases/todo_usecases.dart';
 import 'package:frontend/1_domain/usecases/user_usecases.dart';
+import 'package:frontend/2_application/core/routes/routes.dart';
 import 'package:frontend/2_application/core/storage/shared_preferences.dart';
 import 'package:frontend/2_application/core/storage/storage_interface.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
@@ -15,6 +16,7 @@ import 'package:frontend/2_application/pages/login/cubit/login_cubit.dart';
 import 'package:frontend/2_application/pages/register/bloc/register_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.I;
@@ -50,6 +52,7 @@ Future<void> init() async {
     () => UserRemoteDatasourceImpl(
       fbAuth: sl(),
       fbDatabase: sl(),
+      secureStorage: sl(),
     ),
   );
 
@@ -66,4 +69,7 @@ Future<void> init() async {
   sl.registerFactory(() async => await SharedPreferences.getInstance());
   final SharedPreferences instance = await SharedPreferences.getInstance();
   sl.registerSingleton<AppStorage>(SharedPreferenceService(instance: instance));
+
+  final GoRouter router = await routerFactory(sl());
+  sl.registerSingleton(router);
 }
