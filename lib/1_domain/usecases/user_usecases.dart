@@ -10,7 +10,7 @@ class RegisterUserUC implements UseCase<UserEntity, dynamic> {
   RegisterUserUC({required this.userRepo});
 
   @override
-  Future<Either<Failure, dynamic>> call(UserEntity user) async {
+  Future<Either<Failure, UserEntity>> call(UserEntity user) async {
     try {
       return await userRepo.registerUserToDataSource(user);
     } catch (e) {
@@ -25,7 +25,7 @@ class LoggedInUserUC implements UseCase<UserEntity, dynamic> {
   LoggedInUserUC({required this.userRepo});
 
   @override
-  Future<Either<Failure, dynamic>> call(UserEntity user) async {
+  Future<Either<Failure, UserEntity>> call(UserEntity user) async {
     try {
       return await userRepo.loggedInExistingUserFromDataSource(user);
     } catch (e) {

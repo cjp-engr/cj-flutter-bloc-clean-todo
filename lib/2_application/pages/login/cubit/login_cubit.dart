@@ -7,9 +7,11 @@ import 'package:frontend/2_application/core/extension/bloc_api_status.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  // final LoggedInUserUC userUC = LoggedInUserUC();
   final LoggedInUserUC userUC;
-  LoginCubit({required this.userUC}) : super(LoginState.initialState());
+
+  LoginCubit({
+    required this.userUC,
+  }) : super(LoginState.initialState());
 
   void loggedInUser(UserEntity user) async {
     emit(state.copyWith(status: BlocStatus.loading));
@@ -20,9 +22,9 @@ class LoginCubit extends Cubit<LoginState> {
       (failure) => emit(
         state.copyWith(status: BlocStatus.error),
       ),
-      (success) => emit(
-        state.copyWith(status: BlocStatus.success),
-      ),
+      (user) {
+        emit(state.copyWith(status: BlocStatus.success));
+      },
     );
   }
 
