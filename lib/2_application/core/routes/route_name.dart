@@ -4,4 +4,5 @@ class TodoRouteName {
   static const String allTodo = 'all-todo';
   static const String activeTodo = 'active-todo';
   static const String completedTodo = 'completed-todo';
+  static const String todoForm = 'todo-form';
 }

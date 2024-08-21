@@ -8,6 +8,7 @@ import 'package:frontend/2_application/pages/all_todos/all_todos_page.dart';
 import 'package:frontend/2_application/pages/completed_todos/completed_todos_page.dart';
 import 'package:frontend/2_application/pages/login/login_page.dart';
 import 'package:frontend/2_application/pages/register/register_page.dart';
+import 'package:frontend/2_application/pages/todo_form/todo_form_page.dart';
 import 'package:go_router/go_router.dart';
 
 GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -20,21 +21,16 @@ GlobalKey<NavigatorState> _shellNavigatorCompletedTodosKey =
     GlobalKey<NavigatorState>(debugLabel: 'shellNavigatorCompletedTodosKey');
 
 Future<GoRouter> routerFactory(FlutterSecureStorage storage) async {
+  final accessToken = await storage.read(key: SecureStorageKeys.accessToken);
   return GoRouter(
-    initialLocation: '/${TodoRouteName.login}',
-    redirect: (context, state) async {
-      final accessToken =
-          await storage.read(key: SecureStorageKeys.accessToken);
-      if (accessToken?.isNotEmpty ?? false) {
-        return '/${TodoRouteName.allTodo}';
-      } else {
-        return '/${TodoRouteName.login}';
-      }
-    },
+    initialLocation: accessToken?.isNotEmpty ?? false
+        ? '/${TodoRouteName.allTodo}'
+        : '/${TodoRouteName.login}',
     navigatorKey: _rootNavigatorKey,
     routes: [
       _login(),
       _register(),
+      _todoForm(),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return TodoNavigationBar(navigationShell: navigationShell);
@@ -55,6 +51,16 @@ GoRoute _login() {
     name: TodoRouteName.login,
     pageBuilder: (context, state) => const NoTransitionPage(
       child: LoginPageWrapperProvider(),
+    ),
+  );
+}
+
+GoRoute _todoForm() {
+  return GoRoute(
+    path: '/${TodoRouteName.todoForm}',
+    name: TodoRouteName.todoForm,
+    pageBuilder: (context, state) => const NoTransitionPage(
+      child: TodoFormPageWrapperProvider(),
     ),
   );
 }

@@ -19,11 +19,7 @@ class ListWidget extends StatelessWidget {
           confirmDismiss: (_) async => showDeleteDialog(context),
           child: Card(
             child: ListTile(
-              onTap: () => showTodoDialog(
-                context,
-                title: 'Edit Todo',
-                buttonConfirmText: 'Edit',
-              ),
+              onTap: () {},
               leading: Checkbox(
                 value: todos[index].isCompleted,
                 onChanged: (bool? checked) {},

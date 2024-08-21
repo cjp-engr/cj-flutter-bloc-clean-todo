@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/1_domain/entities/todo_entity.dart';
 import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
 import 'package:frontend/2_application/core/extension/bloc_api_status.dart';
+import 'package:frontend/2_application/core/routes/route_name.dart';
 import 'package:frontend/2_application/core/utils/icon_const.dart';
 import 'package:frontend/2_application/core/widgets/app_bar.dart';
 import 'package:frontend/2_application/core/widgets/buttons.dart';
-import 'package:frontend/2_application/core/widgets/dialog.dart';
 import 'package:frontend/2_application/core/widgets/progress_indicator.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
-import 'package:frontend/2_application/core/widgets/todos/header.dart';
-import 'package:frontend/2_application/core/widgets/todos/list.dart';
+import 'package:frontend/2_application/pages/all_todos/widgets/list.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
 import 'package:frontend/injection.dart';
+import 'package:go_router/go_router.dart';
 
 class AllTodosPageWrapperProvider extends StatelessWidget {
   const AllTodosPageWrapperProvider({super.key});
@@ -53,23 +52,28 @@ class _AllTodosPageState extends State<AllTodosPage> {
         }
 
         return TodoAppBar(
-          appBarTitle: const TodoText(
-            text: 'All Todos',
-            fontSize: TodoFontSize.large,
-            fontWeight: FontWeight.bold,
-          ),
-          appBarActions: [
-            SecondaryButton(
+          appBarLeading: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: TodoSpacing.small),
+            child: SecondaryButton(
+              assetName: IconConst.drawer,
               onPressed: () {},
-              assetName: IconConst.setting,
             ),
-          ],
+          ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: TodoSpacing.small),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const HeaderWidget(),
-                const SizedBox(height: TodoSpacing.large),
+                const TodoText(
+                  text: 'Hello, Carmen!',
+                  fontSize: TodoFontSize.large,
+                  color: Colors.black45,
+                ),
+                const TodoText(
+                  text: 'All Todos (4)',
+                  fontSize: TodoFontSize.extraLarge,
+                  fontWeight: FontWeight.bold,
+                ),
                 ListWidget(todos: state.todos),
                 const SizedBox(height: TodoSpacing.large),
               ],
@@ -87,30 +91,25 @@ class _AddTodoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String title = '';
-    String description = '';
-    return FloatingActionButton(
-      onPressed: () => showTodoDialog(
-        context,
-        title: 'Add Todo',
-        buttonConfirmText: 'Add',
-        todoTitle: (value) => title = value,
-        todoDescription: (value) => description = value,
-        onPressed: () => BlocProvider.of<AllTodosBloc>(context).add(
-          AddTodoEvent(
-            todo: TodoEntity(
-              title: title.trim(),
-              description: description.trim(),
-              isCompleted: false,
-            ),
+    return FloatingActionButton.extended(
+      onPressed: () {
+        context.goNamed(TodoRouteName.todoForm);
+      },
+      label: const Row(
+        children: [
+          TodoText(
+            text: 'Write a new todo',
+            textAlign: TextAlign.left,
           ),
-        ),
+          SizedBox(width: TodoSpacing.extraSmall),
+          Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 28,
+          )
+        ],
       ),
-      child: const Icon(
-        Icons.add,
-        color: Colors.white,
-        size: 28,
-      ),
+      // icon: ,
     );
   }
 }

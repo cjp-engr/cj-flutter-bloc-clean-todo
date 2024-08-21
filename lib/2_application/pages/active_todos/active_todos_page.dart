@@ -4,7 +4,6 @@ import 'package:frontend/2_application/core/constants/spacing.dart';
 import 'package:frontend/2_application/core/utils/icon_const.dart';
 import 'package:frontend/2_application/core/widgets/app_bar.dart';
 import 'package:frontend/2_application/core/widgets/buttons.dart';
-import 'package:frontend/2_application/core/widgets/dialog.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/todos/header.dart';
 
@@ -35,14 +34,6 @@ class ActiveTodosPage extends StatelessWidget {
             SizedBox(height: TodoSpacing.large),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => showTodoDialog(
-          context,
-          title: 'Add Todo',
-          buttonConfirmText: 'Add',
-        ),
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
     );
   }
