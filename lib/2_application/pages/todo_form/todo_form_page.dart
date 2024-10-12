@@ -12,16 +12,26 @@ import 'package:frontend/2_application/core/widgets/text_field.dart';
 import 'package:go_router/go_router.dart';
 
 class TodoFormPageWrapperProvider extends StatelessWidget {
-  const TodoFormPageWrapperProvider({super.key});
+  final bool isAddForm;
+  const TodoFormPageWrapperProvider({
+    super.key,
+    required this.isAddForm,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const TodoFormPage();
+    return const TodoFormPage(
+      isAddForm: true,
+    );
   }
 }
 
 class TodoFormPage extends StatefulWidget {
-  const TodoFormPage({super.key});
+  final bool isAddForm;
+  const TodoFormPage({
+    super.key,
+    required this.isAddForm,
+  });
 
   @override
   State<TodoFormPage> createState() => _TodoFormPageState();
@@ -66,8 +76,8 @@ class _TodoFormPageState extends State<TodoFormPage> {
             autovalidateMode: _autovalidateMode,
             child: ListView(
               children: [
-                const TodoText(
-                  text: 'Add New One!',
+                TodoText(
+                  text: widget.isAddForm ? 'Add New One!' : 'Update Todo',
                   fontSize: TodoFontSize.veryLarge,
                   fontWeight: FontWeight.bold,
                   textAlign: TextAlign.start,

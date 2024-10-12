@@ -57,11 +57,17 @@ GoRoute _login() {
 
 GoRoute _todoForm() {
   return GoRoute(
-    path: '/${TodoRouteName.todoForm}',
+    path: '/${TodoRouteName.todoForm}/:action',
     name: TodoRouteName.todoForm,
-    pageBuilder: (context, state) => const NoTransitionPage(
-      child: TodoFormPageWrapperProvider(),
-    ),
+    pageBuilder: (context, state) {
+      return state.pathParameters['action'] == 'add'
+          ? const NoTransitionPage(
+              child: TodoFormPageWrapperProvider(isAddForm: true),
+            )
+          : const NoTransitionPage(
+              child: TodoFormPageWrapperProvider(isAddForm: false),
+            );
+    },
   );
 }
 

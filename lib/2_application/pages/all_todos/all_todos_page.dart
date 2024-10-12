@@ -109,7 +109,6 @@ class _AddTodoWidget extends StatelessWidget {
           )
         ],
       ),
-      // icon: ,
     );
   }
 }
