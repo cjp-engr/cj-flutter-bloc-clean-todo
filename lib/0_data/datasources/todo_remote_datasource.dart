@@ -8,7 +8,7 @@ abstract class TodoRemoteDatasource {
   Future<List<TodoModel>> readTodosFromDatabase();
   Future<TodoModel> addTodoToDatabase(TodoEntity todo);
   Future<TodoModel> updateTodoToDatabase(TodoEntity todo);
-  Future<TodoModel> deleteTodoToDatabase(String id);
+  Future<void> deleteTodoToDatabase(String id);
 }
 
 class TodoRemoteDatasourceImpl implements TodoRemoteDatasource {
@@ -75,12 +75,31 @@ class TodoRemoteDatasourceImpl implements TodoRemoteDatasource {
   }
 
   @override
-  Future<TodoModel> deleteTodoToDatabase(String id) {
-    throw UnimplementedError();
+  Future<void> deleteTodoToDatabase(String id) async {
+    try {
+      await _todoCollection().doc(id).delete();
+    } catch (_) {
+      throw ServerException();
+    }
   }
 
   @override
-  Future<TodoModel> updateTodoToDatabase(TodoEntity todo) {
-    throw UnimplementedError();
+  Future<TodoModel> updateTodoToDatabase(TodoEntity todo) async {
+    try {
+      await _todoCollection().doc(todo.id).update({
+        'userId': _userId,
+        'title': todo.title,
+        'description': todo.description,
+        'is_completed': todo.isCompleted,
+      });
+      return TodoModel(
+        id: todo.id,
+        title: todo.title,
+        description: todo.description,
+        isCompleted: todo.isCompleted,
+      );
+    } catch (_) {
+      throw ServerException();
+    }
   }
 }

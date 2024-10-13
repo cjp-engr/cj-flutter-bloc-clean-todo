@@ -20,7 +20,8 @@ class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
   }) : super(AllTodosState.initialState()) {
     on<AddTodoEvent>(_addTodo);
     on<ReadTodosEvent>(_readTodos);
-
+    on<UpdateTodoEvent>(_updateTodo);
+    on<DeleteTodoEvent>(_deleteTodo);
     add(ReadTodosEvent());
   }
 
@@ -41,13 +42,27 @@ class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
     );
   }
 
+  Future<void> _updateTodo(
+    UpdateTodoEvent event,
+    Emitter<AllTodosState> emit,
+  ) async {
+    emit(state.copyWith(status: BlocStatus.loading));
+    final failureOrSuccess = await updateTodoUC.call(event.todo);
+    failureOrSuccess.fold(
+      (failure) => emit(
+        state.copyWith(status: BlocStatus.error),
+      ),
+      (success) => emit(
+        state.copyWith(status: BlocStatus.success),
+      ),
+    );
+  }
+
   Future<void> _readTodos(
     ReadTodosEvent event,
     Emitter<AllTodosState> emit,
   ) async {
-    emit(
-      state.copyWith(status: BlocStatus.loading),
-    );
+    emit(state.copyWith(status: BlocStatus.loading));
     final failureOrSuccess = await readTodosUC.call();
 
     failureOrSuccess.fold(
@@ -56,6 +71,23 @@ class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
       ),
       (todos) => emit(
         state.copyWith(status: BlocStatus.success, todos: todos),
+      ),
+    );
+  }
+
+  Future<void> _deleteTodo(
+    DeleteTodoEvent event,
+    Emitter<AllTodosState> emit,
+  ) async {
+    emit(state.copyWith(status: BlocStatus.loading));
+    final failureOrSuccess = await deleteTodoUC.call(event.id);
+
+    failureOrSuccess.fold(
+      (failure) => emit(
+        state.copyWith(status: BlocStatus.error),
+      ),
+      (success) => emit(
+        state.copyWith(status: BlocStatus.success),
       ),
     );
   }

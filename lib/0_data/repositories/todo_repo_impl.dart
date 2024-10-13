@@ -35,12 +35,27 @@ class TodoRepoImpl implements TodoRepo {
   }
 
   @override
-  Future<Either<Failure, TodoEntity>> deleteTodoToDataSource(String id) {
-    throw UnimplementedError();
+  Future<Either<Failure, void>> deleteTodoToDataSource(String id) async {
+    try {
+      final result = await todoRemoteDatasource.deleteTodoToDatabase(id);
+      return right(result);
+    } on ServerException catch (_) {
+      return left(ServerFailure());
+    } catch (_) {
+      return left(GeneralFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, TodoEntity>> updateTodoToDataSource(TodoEntity todo) {
-    throw UnimplementedError();
+  Future<Either<Failure, TodoEntity>> updateTodoToDataSource(
+      TodoEntity todo) async {
+    try {
+      final result = await todoRemoteDatasource.updateTodoToDatabase(todo);
+      return right(result);
+    } on ServerException catch (_) {
+      return left(ServerFailure());
+    } catch (_) {
+      return left(GeneralFailure());
+    }
   }
 }

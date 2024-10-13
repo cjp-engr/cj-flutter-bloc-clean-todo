@@ -17,3 +17,21 @@ class ReadTodosEvent extends AllTodosEvent {
   @override
   List<Object?> get props => [];
 }
+
+class DeleteTodoEvent extends AllTodosEvent {
+  final String id;
+
+  DeleteTodoEvent({required this.id});
+
+  @override
+  List<Object?> get props => [id];
+}
+
+class UpdateTodoEvent extends AllTodosEvent {
+  final TodoEntity todo;
+
+  UpdateTodoEvent({required this.todo});
+
+  @override
+  List<Object?> get props => [todo];
+}

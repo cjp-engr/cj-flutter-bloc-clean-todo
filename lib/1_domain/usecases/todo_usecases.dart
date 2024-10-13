@@ -25,7 +25,7 @@ class AddTodoUC implements UseCase<TodoEntity, dynamic> {
   AddTodoUC({required this.todoRepo});
 
   @override
-  Future<Either<Failure, dynamic>> call(TodoEntity todo) async {
+  Future<Either<Failure, TodoEntity>> call(TodoEntity todo) async {
     try {
       return await todoRepo.addTodoToDataSource(todo);
     } catch (e) {
@@ -40,7 +40,7 @@ class UpdateTodoUC implements UseCase<TodoEntity, dynamic> {
   UpdateTodoUC({required this.todoRepo});
 
   @override
-  Future<Either<Failure, dynamic>> call(TodoEntity todo) async {
+  Future<Either<Failure, TodoEntity>> call(TodoEntity todo) async {
     try {
       return await todoRepo.updateTodoToDataSource(todo);
     } catch (e) {

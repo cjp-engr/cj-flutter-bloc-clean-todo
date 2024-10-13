@@ -93,7 +93,13 @@ class _AddTodoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () {
-        context.goNamed(TodoRouteName.todoForm);
+        context.goNamed(
+          TodoRouteName.todoForm,
+          pathParameters: {
+            'action': 'add',
+            'index': ' ',
+          },
+        );
       },
       label: const Row(
         children: [
