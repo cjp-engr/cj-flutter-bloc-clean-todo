@@ -65,7 +65,26 @@ class _TodoFormPageState extends State<TodoFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AllTodosBloc, AllTodosState>(
+    return BlocConsumer<AllTodosBloc, AllTodosState>(
+      listener: (context, state) {
+        if (state.status == BlocStatus.error) {
+          final snackBar = SnackBar(
+            content: const Text('Something is wrong!'),
+            action: SnackBarAction(
+              label: 'OK!',
+              onPressed: () {
+                // Some code to undo the change.
+              },
+            ),
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+
+        if (state.status == BlocStatus.updated) {
+          context.goNamed(TodoRouteName.allTodo);
+        }
+      },
       builder: (context, state) {
         return TodoAppBar(
           appBarLeading: Padding(
@@ -177,6 +196,7 @@ class _TodoFormPageState extends State<TodoFormPage> {
     context.read<AllTodosBloc>().add(
           UpdateTodoEvent(
             todo: TodoEntity(
+              id: id,
               title: _titleController.text,
               description: _descriptionController.text,
               isCompleted: false,

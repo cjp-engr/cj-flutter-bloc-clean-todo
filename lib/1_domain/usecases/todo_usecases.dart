@@ -55,7 +55,7 @@ class DeleteTodoUC implements UseCase<String, dynamic> {
   DeleteTodoUC({required this.todoRepo});
 
   @override
-  Future<Either<Failure, dynamic>> call(String id) async {
+  Future<Either<Failure, String>> call(String id) async {
     try {
       return await todoRepo.deleteTodoToDataSource(id);
     } catch (e) {

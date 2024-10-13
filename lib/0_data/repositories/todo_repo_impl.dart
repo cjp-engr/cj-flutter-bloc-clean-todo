@@ -35,10 +35,10 @@ class TodoRepoImpl implements TodoRepo {
   }
 
   @override
-  Future<Either<Failure, void>> deleteTodoToDataSource(String id) async {
+  Future<Either<Failure, String>> deleteTodoToDataSource(String id) async {
     try {
-      final result = await todoRemoteDatasource.deleteTodoToDatabase(id);
-      return right(result);
+      await todoRemoteDatasource.deleteTodoToDatabase(id);
+      return right(id);
     } on ServerException catch (_) {
       return left(ServerFailure());
     } catch (_) {

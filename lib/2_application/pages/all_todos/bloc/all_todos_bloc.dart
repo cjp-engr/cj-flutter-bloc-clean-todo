@@ -22,7 +22,10 @@ class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
     on<ReadTodosEvent>(_readTodos);
     on<UpdateTodoEvent>(_updateTodo);
     on<DeleteTodoEvent>(_deleteTodo);
-    add(ReadTodosEvent());
+
+    if (state.status == BlocStatus.initial) {
+      add(ReadTodosEvent());
+    }
   }
 
   Future<void> _addTodo(
@@ -37,7 +40,7 @@ class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
         state.copyWith(status: BlocStatus.error),
       ),
       (success) => emit(
-        state.copyWith(status: BlocStatus.success),
+        state.copyWith(status: BlocStatus.updated),
       ),
     );
   }
@@ -48,14 +51,25 @@ class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
   ) async {
     emit(state.copyWith(status: BlocStatus.loading));
     final failureOrSuccess = await updateTodoUC.call(event.todo);
-    failureOrSuccess.fold(
-      (failure) => emit(
-        state.copyWith(status: BlocStatus.error),
-      ),
-      (success) => emit(
-        state.copyWith(status: BlocStatus.success),
-      ),
-    );
+
+    failureOrSuccess.fold((failure) {
+      emit(state.copyWith(status: BlocStatus.error));
+    }, (editedTodo) {
+      final todos = state.todos.map(
+        (TodoEntity todo) {
+          if (editedTodo.id == todo.id) {
+            return TodoEntity(
+              id: todo.id,
+              title: editedTodo.title,
+              description: editedTodo.description,
+              isCompleted: editedTodo.isCompleted,
+            );
+          }
+          return todo;
+        },
+      ).toList();
+      emit(state.copyWith(status: BlocStatus.updated, todos: todos));
+    });
   }
 
   Future<void> _readTodos(
@@ -81,14 +95,14 @@ class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
   ) async {
     emit(state.copyWith(status: BlocStatus.loading));
     final failureOrSuccess = await deleteTodoUC.call(event.id);
-
     failureOrSuccess.fold(
       (failure) => emit(
         state.copyWith(status: BlocStatus.error),
       ),
-      (success) => emit(
-        state.copyWith(status: BlocStatus.success),
-      ),
+      (id) {
+        final todos = state.todos.where((TodoEntity t) => t.id != id).toList();
+        emit(state.copyWith(status: BlocStatus.success, todos: todos));
+      },
     );
   }
 }

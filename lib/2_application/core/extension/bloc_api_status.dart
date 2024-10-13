@@ -1,1 +1,1 @@
-enum BlocStatus { initial, loading, success, error }
+enum BlocStatus { initial, loading, loaded, success, updated, error }

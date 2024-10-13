@@ -26,19 +26,8 @@ class AllTodosPageWrapperProvider extends StatelessWidget {
   }
 }
 
-class AllTodosPage extends StatefulWidget {
+class AllTodosPage extends StatelessWidget {
   const AllTodosPage({super.key});
-
-  @override
-  State<AllTodosPage> createState() => _AllTodosPageState();
-}
-
-class _AllTodosPageState extends State<AllTodosPage> {
-  @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<AllTodosBloc>(context).add(ReadTodosEvent());
-  }
 
   @override
   Widget build(BuildContext context) {
