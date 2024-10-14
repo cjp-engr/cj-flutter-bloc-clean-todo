@@ -20,9 +20,7 @@ class AllTodosPageWrapperProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<AllTodosBloc>(),
-      child: const AllTodosPage(),
-    );
+        create: (_) => sl<AllTodosBloc>(), child: const AllTodosPage());
   }
 }
 
@@ -31,7 +29,8 @@ class AllTodosPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AllTodosBloc, AllTodosState>(
+    return BlocConsumer<AllTodosBloc, AllTodosState>(
+      listener: (context, state) {},
       builder: (context, state) {
         if (state.status == BlocStatus.loading) {
           return const TodoProgressIndicator();
@@ -58,8 +57,8 @@ class AllTodosPage extends StatelessWidget {
                   fontSize: TodoFontSize.large,
                   color: Colors.black45,
                 ),
-                const TodoText(
-                  text: 'All Todos (4)',
+                TodoText(
+                  text: 'All Todos (${state.todos.length})',
                   fontSize: TodoFontSize.extraLarge,
                   fontWeight: FontWeight.bold,
                 ),

@@ -11,6 +11,7 @@ import 'package:frontend/1_domain/usecases/user_usecases.dart';
 import 'package:frontend/2_application/core/routes/routes.dart';
 import 'package:frontend/2_application/core/storage/shared_preferences.dart';
 import 'package:frontend/2_application/core/storage/storage_interface.dart';
+import 'package:frontend/2_application/pages/active_todos/bloc/active_todos_bloc.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
 import 'package:frontend/2_application/pages/login/cubit/login_cubit.dart';
 import 'package:frontend/2_application/pages/register/bloc/register_bloc.dart';
@@ -34,6 +35,12 @@ Future<void> init() async {
       readTodosUC: sl(),
       updateTodoUC: sl(),
       deleteTodoUC: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => ActiveTodosBloc(
+      updateTodoUC: sl(),
+      readTodosUC: sl(),
     ),
   );
 

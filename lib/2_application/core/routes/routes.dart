@@ -107,7 +107,7 @@ StatefulShellBranch _activeTodos() {
         path: '/${TodoRouteName.activeTodo}',
         name: TodoRouteName.activeTodo,
         pageBuilder: (context, state) => const NoTransitionPage(
-          child: ActiveTodosPage(),
+          child: ActiveTodosPageWrapperProvider(),
         ),
       ),
     ],

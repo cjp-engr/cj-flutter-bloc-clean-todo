@@ -72,7 +72,7 @@ class AppTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: const BorderRadius.all(
-          Radius.circular(TodoBorderRadius.verySmall),
+          Radius.circular(TodoBorderRadius.medium),
         ),
         borderSide: BorderSide(
           color: TodoColor.lightPrimaryVariantColor,

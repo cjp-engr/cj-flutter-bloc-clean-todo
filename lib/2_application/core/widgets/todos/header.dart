@@ -15,11 +15,6 @@ class HeaderWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TodoText(
-              text: 'Todos',
-              fontSize: TodoFontSize.veryLarge,
-              fontWeight: FontWeight.bold,
-            ),
-            TodoText(
               text: 'x items left',
               fontSize: TodoFontSize.large,
             ),
