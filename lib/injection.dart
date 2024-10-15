@@ -13,6 +13,7 @@ import 'package:frontend/2_application/core/storage/shared_preferences.dart';
 import 'package:frontend/2_application/core/storage/storage_interface.dart';
 import 'package:frontend/2_application/pages/active_todos/bloc/active_todos_bloc.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
+import 'package:frontend/2_application/pages/completed_todos/bloc/completed_todo_bloc.dart';
 import 'package:frontend/2_application/pages/login/cubit/login_cubit.dart';
 import 'package:frontend/2_application/pages/register/bloc/register_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,9 +41,10 @@ Future<void> init() async {
   sl.registerFactory(
     () => ActiveTodosBloc(
       updateTodoUC: sl(),
-      readTodosUC: sl(),
     ),
   );
+
+  sl.registerFactory(() => CompletedTodoBloc());
 
   // ! domain Layer
   sl.registerFactory(() => LoggedInUserUC(userRepo: sl()));

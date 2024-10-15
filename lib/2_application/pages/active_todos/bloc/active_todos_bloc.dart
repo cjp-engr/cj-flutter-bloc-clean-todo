@@ -9,29 +9,42 @@ part 'active_todos_state.dart';
 
 class ActiveTodosBloc extends Bloc<ActiveTodosEvent, ActiveTodosState> {
   final UpdateTodoUC updateTodoUC;
-  final ReadTodosUC readTodosUC;
   ActiveTodosBloc({
     required this.updateTodoUC,
-    required this.readTodosUC,
   }) : super(ActiveTodosState.initialState()) {
-    on<CompleteTodoEvent>(_completeTodo);
+    on<DoneTodoEvent>(_doneTodo);
     on<ReadActiveTodosEvent>(_readActiveTodos);
   }
 
-  Future<void> _completeTodo(
-    CompleteTodoEvent event,
+  Future<void> _doneTodo(
+    DoneTodoEvent event,
     Emitter<ActiveTodosState> emit,
   ) async {
     emit(state.copyWith(status: BlocStatus.loading));
     final failureOrSuccess = await updateTodoUC.call(event.todo);
 
     failureOrSuccess.fold(
-      (failure) => emit(
-        state.copyWith(status: BlocStatus.error),
-      ),
-      (success) => emit(
-        state.copyWith(status: BlocStatus.updated),
-      ),
+      (failure) {
+        emit(
+          state.copyWith(status: BlocStatus.error),
+        );
+      },
+      (doneTodo) {
+        final todos = state.todos.map(
+          (TodoEntity todo) {
+            if (doneTodo.id == todo.id) {
+              return TodoEntity(
+                id: todo.id,
+                title: doneTodo.title,
+                description: doneTodo.description,
+                isCompleted: doneTodo.isCompleted,
+              );
+            }
+            return todo;
+          },
+        ).toList();
+        emit(state.copyWith(status: BlocStatus.updated, todos: todos));
+      },
     );
   }
 
@@ -39,6 +52,8 @@ class ActiveTodosBloc extends Bloc<ActiveTodosEvent, ActiveTodosState> {
     ReadActiveTodosEvent event,
     Emitter<ActiveTodosState> emit,
   ) async {
-    emit(state.copyWith(todos: event.todos, status: BlocStatus.success));
+    final activeTodos =
+        event.todos.where((todo) => todo.isCompleted == false).toList();
+    emit(state.copyWith(todos: activeTodos, status: BlocStatus.success));
   }
 }

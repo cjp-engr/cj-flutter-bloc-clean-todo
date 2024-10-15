@@ -122,7 +122,7 @@ StatefulShellBranch _completedTodos() {
         path: '/${TodoRouteName.completedTodo}',
         name: TodoRouteName.completedTodo,
         pageBuilder: (context, state) => const NoTransitionPage(
-          child: CompletedTodosPage(),
+          child: CompleteTodosPageWrapperProvider(),
         ),
       ),
     ],

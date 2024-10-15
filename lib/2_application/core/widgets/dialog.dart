@@ -6,16 +6,16 @@ import 'package:frontend/2_application/core/widgets/buttons.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 
 class _TodoDialog extends StatelessWidget {
-  final String? title;
-  final String? subTitle;
-  final Function()? onPressed;
+  final String title;
+  final String subTitle;
+  final Function()? onConfirm;
   final String? buttonConfirmText;
   final String? buttonCancelText;
 
   const _TodoDialog({
     required this.title,
     required this.subTitle,
-    this.onPressed,
+    this.onConfirm,
     this.buttonConfirmText,
     this.buttonCancelText,
   });
@@ -34,15 +34,17 @@ class _TodoDialog extends StatelessWidget {
             title: SizedBox(
               width: context.screenWidth,
               child: TodoText(
-                text: title!,
+                text: title,
                 fontSize: TodoFontSize.large,
                 fontWeight: FontWeight.bold,
               ),
             ),
             content: SizedBox(
-              height: context.screenHeight / 6,
-              child: const Column(
-                children: [],
+              height: context.screenHeight / 10,
+              child: TodoText(
+                text: subTitle,
+                fontSize: TodoFontSize.large,
+                fontWeight: FontWeight.normal,
               ),
             ),
             actionsAlignment: MainAxisAlignment.center,
@@ -54,7 +56,7 @@ class _TodoDialog extends StatelessWidget {
               PrimaryButton(
                 text: buttonConfirmText!,
                 onPressed: () {
-                  onPressed!();
+                  onConfirm!();
                   Navigator.of(context).pop();
                 },
               ),
@@ -66,11 +68,11 @@ class _TodoDialog extends StatelessWidget {
   }
 }
 
-Future<bool?> showDeleteDialog(
+Future<bool?> showTodoDialog(
   BuildContext context, {
-  String? title,
-  String? subTitle,
-  Function()? onPressed,
+  required String title,
+  required String subTitle,
+  Function()? onConfirm,
   final String? buttonConfirmText,
   final String? buttonCancelText,
 }) async {
@@ -81,7 +83,7 @@ Future<bool?> showDeleteDialog(
       return _TodoDialog(
         title: title,
         subTitle: subTitle,
-        onPressed: onPressed,
+        onConfirm: onConfirm,
         buttonCancelText: buttonCancelText,
         buttonConfirmText: buttonConfirmText,
       );

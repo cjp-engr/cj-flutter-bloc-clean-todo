@@ -153,7 +153,7 @@ class _TodoFormPageState extends State<TodoFormPage> {
                                   widget.isAddForm
                                       ? _submitAddTodo()
                                       : _submitUpdateTodo(
-                                          state.todos[widget.index].id!);
+                                          state.todos[widget.index]);
                                 },
                               ),
                               const SizedBox(
@@ -192,14 +192,12 @@ class _TodoFormPageState extends State<TodoFormPage> {
         );
   }
 
-  void _submitUpdateTodo(String id) {
+  void _submitUpdateTodo(TodoEntity todo) {
     context.read<AllTodosBloc>().add(
           UpdateTodoEvent(
-            todo: TodoEntity(
-              id: id,
+            todo: todo.copyWith(
               title: _titleController.text,
               description: _descriptionController.text,
-              isCompleted: false,
             ),
           ),
         );
