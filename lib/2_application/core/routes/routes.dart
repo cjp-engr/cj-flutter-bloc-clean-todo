@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/2_application/core/routes/route_name.dart';
+import 'package:frontend/2_application/core/routes/router_observer.dart';
 import 'package:frontend/2_application/core/storage/secure_storage.dart';
 import 'package:frontend/2_application/core/widgets/navigation_bar.dart';
 import 'package:frontend/2_application/pages/active_todos/active_todos_page.dart';
+import 'package:frontend/2_application/pages/active_todos/bloc/active_todos_bloc.dart';
 import 'package:frontend/2_application/pages/all_todos/all_todos_page.dart';
+import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
+import 'package:frontend/2_application/pages/completed_todos/bloc/completed_todo_bloc.dart';
 import 'package:frontend/2_application/pages/completed_todos/completed_todos_page.dart';
 import 'package:frontend/2_application/pages/login/login_page.dart';
 import 'package:frontend/2_application/pages/register/register_page.dart';
 import 'package:frontend/2_application/pages/todo_form/todo_form_page.dart';
+import 'package:frontend/injection.dart';
 import 'package:go_router/go_router.dart';
 
 GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -27,6 +33,9 @@ Future<GoRouter> routerFactory(FlutterSecureStorage storage) async {
         ? '/${TodoRouteName.allTodo}'
         : '/${TodoRouteName.login}',
     navigatorKey: _rootNavigatorKey,
+    observers: [
+      GoRouterObserver(),
+    ],
     routes: [
       _login(),
       _register(),
@@ -91,9 +100,14 @@ StatefulShellBranch _allTodos() {
       GoRoute(
         path: '/${TodoRouteName.allTodo}',
         name: TodoRouteName.allTodo,
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: AllTodosPageWrapperProvider(),
-        ),
+        pageBuilder: (context, state) {
+          return MaterialPage<void>(
+            key: UniqueKey(),
+            child: MultiBlocProvider(providers: [
+              BlocProvider(create: (_) => sl<AllTodosBloc>()),
+            ], child: const AllTodosPage()),
+          );
+        },
       ),
     ],
   );
@@ -106,9 +120,17 @@ StatefulShellBranch _activeTodos() {
       GoRoute(
         path: '/${TodoRouteName.activeTodo}',
         name: TodoRouteName.activeTodo,
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: ActiveTodosPageWrapperProvider(),
-        ),
+        pageBuilder: (context, state) {
+          return MaterialPage<void>(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (_) => sl<ActiveTodosBloc>()),
+                BlocProvider(create: (_) => sl<AllTodosBloc>()),
+              ],
+              child: const ActiveTodosPage(),
+            ),
+          );
+        },
       ),
     ],
   );
@@ -121,9 +143,17 @@ StatefulShellBranch _completedTodos() {
       GoRoute(
         path: '/${TodoRouteName.completedTodo}',
         name: TodoRouteName.completedTodo,
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: CompleteTodosPageWrapperProvider(),
-        ),
+        pageBuilder: (context, state) {
+          return MaterialPage<void>(
+              key: UniqueKey(),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (_) => sl<CompletedTodoBloc>()),
+                  BlocProvider(create: (_) => sl<AllTodosBloc>()),
+                ],
+                child: const CompletedTodosPage(),
+              ));
+        },
       ),
     ],
   );

@@ -11,18 +11,7 @@ import 'package:frontend/2_application/core/widgets/progress_indicator.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/pages/all_todos/widgets/list.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
-import 'package:frontend/injection.dart';
 import 'package:go_router/go_router.dart';
-
-class AllTodosPageWrapperProvider extends StatelessWidget {
-  const AllTodosPageWrapperProvider({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (_) => sl<AllTodosBloc>(), child: const AllTodosPage());
-  }
-}
 
 class AllTodosPage extends StatelessWidget {
   const AllTodosPage({super.key});

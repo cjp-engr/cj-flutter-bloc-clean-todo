@@ -10,6 +10,7 @@ import 'package:frontend/2_application/core/utils/build_context_ext.dart';
 import 'package:frontend/2_application/core/utils/icon_const.dart';
 import 'package:frontend/2_application/core/widgets/app_bar.dart';
 import 'package:frontend/2_application/core/widgets/buttons.dart';
+import 'package:frontend/2_application/core/widgets/dialog.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
@@ -144,6 +145,7 @@ class _TodoFormPageState extends State<TodoFormPage> {
                           ),
                           const SizedBox(height: TodoSpacing.medium),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               PrimaryButton(
                                 text:
@@ -156,9 +158,22 @@ class _TodoFormPageState extends State<TodoFormPage> {
                                           state.todos[widget.index]);
                                 },
                               ),
-                              const SizedBox(
-                                width: 100,
-                              ),
+                              widget.isAddForm
+                                  ? const SizedBox()
+                                  : SecondaryButton(
+                                      assetName: IconConst.drawer,
+                                      onPressed: () async {
+                                        showTodoDialog(
+                                          context,
+                                          title: 'Are you sure?',
+                                          subTitle:
+                                              'Deleting this task cannot be undone',
+                                          onConfirm: () => _deleteTodo(context,
+                                              state.todos[widget.index].id!),
+                                          buttonConfirmText: 'Confirm',
+                                        );
+                                      },
+                                    ),
                             ],
                           ),
                         ],
@@ -199,6 +214,14 @@ class _TodoFormPageState extends State<TodoFormPage> {
               title: _titleController.text,
               description: _descriptionController.text,
             ),
+          ),
+        );
+  }
+
+  void _deleteTodo(BuildContext context, String id) {
+    context.read<AllTodosBloc>().add(
+          DeleteTodoEvent(
+            id: id,
           ),
         );
   }

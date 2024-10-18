@@ -23,9 +23,7 @@ class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
     on<UpdateTodoEvent>(_updateTodo);
     on<DeleteTodoEvent>(_deleteTodo);
 
-    if (state.status == BlocStatus.initial) {
-      add(ReadTodosEvent());
-    }
+    add(ReadTodosEvent());
   }
 
   Future<void> _addTodo(
@@ -101,7 +99,7 @@ class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
       ),
       (id) {
         final todos = state.todos.where((TodoEntity t) => t.id != id).toList();
-        emit(state.copyWith(status: BlocStatus.success, todos: todos));
+        emit(state.copyWith(status: BlocStatus.updated, todos: todos));
       },
     );
   }

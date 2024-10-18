@@ -11,6 +11,7 @@ class PrimaryButton extends StatelessWidget {
   final Function()? onPressed;
   final double? width;
   final double? height;
+  final Color? color;
 
   const PrimaryButton({
     super.key,
@@ -18,6 +19,7 @@ class PrimaryButton extends StatelessWidget {
     this.onPressed,
     this.width,
     this.height,
+    this.color,
   });
 
   @override

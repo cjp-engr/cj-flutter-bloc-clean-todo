@@ -18,3 +18,11 @@ class ReadActiveTodosEvent extends ActiveTodosEvent {
   @override
   List<Object?> get props => [todos];
 }
+
+class SearchActiveTodoEvent extends ActiveTodosEvent {
+  final String todo;
+  SearchActiveTodoEvent({required this.todo});
+
+  @override
+  List<Object?> get props => [todo];
+}

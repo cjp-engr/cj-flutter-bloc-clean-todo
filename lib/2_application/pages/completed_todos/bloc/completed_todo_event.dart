@@ -9,3 +9,11 @@ class ReadCompletedTodosEvent extends CompletedTodoEvent {
   @override
   List<Object?> get props => [todos];
 }
+
+class SearchCompletedTodoEvent extends CompletedTodoEvent {
+  final String todo;
+  SearchCompletedTodoEvent({required this.todo});
+
+  @override
+  List<Object?> get props => [todo];
+}

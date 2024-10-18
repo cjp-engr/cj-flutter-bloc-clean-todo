@@ -6,6 +6,7 @@ import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
 import 'package:frontend/2_application/core/routes/route_name.dart';
 import 'package:frontend/2_application/core/utils/icon_const.dart';
+import 'package:frontend/2_application/core/widgets/dialog.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +28,15 @@ class ListWidget extends StatelessWidget {
             extentRatio: 0.25,
             children: [
               SlidableAction(
-                onPressed: (_) => _deleteTodo(context, index),
+                onPressed: (_) async {
+                  showTodoDialog(
+                    context,
+                    title: 'Are you sure?',
+                    subTitle: 'Deleting this task cannot be undone',
+                    onConfirm: () => _deleteTodo(context, index),
+                    buttonConfirmText: 'Confirm',
+                  );
+                },
                 backgroundColor: const Color(0xFFFE4A49),
                 foregroundColor: Colors.white,
                 icon: Icons.delete,

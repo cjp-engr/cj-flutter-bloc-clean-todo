@@ -52,6 +52,8 @@ class ActiveTodosBloc extends Bloc<ActiveTodosEvent, ActiveTodosState> {
     ReadActiveTodosEvent event,
     Emitter<ActiveTodosState> emit,
   ) async {
+    emit(state.copyWith(status: BlocStatus.loading));
+
     final activeTodos =
         event.todos.where((todo) => todo.isCompleted == false).toList();
     emit(state.copyWith(todos: activeTodos, status: BlocStatus.success));

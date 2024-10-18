@@ -4,7 +4,6 @@ import 'package:frontend/1_domain/entities/todo_entity.dart';
 import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
 import 'package:frontend/2_application/core/extension/bloc_api_status.dart';
-import 'package:frontend/2_application/core/routes/route_name.dart';
 import 'package:frontend/2_application/core/utils/icon_const.dart';
 import 'package:frontend/2_application/core/widgets/app_bar.dart';
 import 'package:frontend/2_application/core/widgets/buttons.dart';
@@ -14,20 +13,6 @@ import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
 import 'package:frontend/2_application/pages/active_todos/bloc/active_todos_bloc.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
-import 'package:frontend/injection.dart';
-import 'package:go_router/go_router.dart';
-
-class ActiveTodosPageWrapperProvider extends StatelessWidget {
-  const ActiveTodosPageWrapperProvider({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(providers: [
-      BlocProvider(create: (_) => sl<ActiveTodosBloc>()),
-      BlocProvider(create: (_) => sl<AllTodosBloc>()),
-    ], child: const ActiveTodosPage());
-  }
-}
 
 class ActiveTodosPage extends StatefulWidget {
   const ActiveTodosPage({super.key});
@@ -47,18 +32,20 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
               .add(ReadActiveTodosEvent(todos: allTodoState.todos));
         }
       },
-      builder: (context, state) {
+      builder: (context, allTodoState) {
         return BlocConsumer<ActiveTodosBloc, ActiveTodosState>(
-          listener: (context, state) {
-            if (state.status == BlocStatus.updated) {
-              context.goNamed(TodoRouteName.completedTodo);
+          listener: (context, state1) {
+            if (state1.status == BlocStatus.updated) {
+              context
+                  .read<ActiveTodosBloc>()
+                  .add(ReadActiveTodosEvent(todos: state1.todos));
             }
           },
-          builder: (context, state) {
-            if (state.status == BlocStatus.loading) {
+          builder: (context, state2) {
+            if (state2.status == BlocStatus.loading) {
               return const TodoProgressIndicator();
             }
-            if (state.status == BlocStatus.error) {
+            if (state2.status == BlocStatus.error) {
               return const Text('test you cannot register, sorry');
             }
 
@@ -78,7 +65,7 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TodoText(
-                      text: 'Active (${state.todos.length})',
+                      text: 'Active (${state2.todos.length})',
                       fontSize: TodoFontSize.extraLarge,
                       fontWeight: FontWeight.bold,
                     ),
@@ -88,7 +75,7 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
                     ListView.builder(
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: state.todos.length,
+                      itemCount: state2.todos.length,
                       itemBuilder: (context, index) => SizedBox(
                         height: 100,
                         child: Card(
@@ -102,11 +89,11 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
                                       height: TodoSpacing.extraSmall),
                                   TodoText(
                                     fontSize: TodoFontSize.veryLarge,
-                                    text: state.todos[index].title,
+                                    text: state2.todos[index].title,
                                     textAlign: TextAlign.left,
                                   ),
                                   TodoText(
-                                    text: state.todos[index].description,
+                                    text: state2.todos[index].description,
                                     textAlign: TextAlign.left,
                                     maxLines: 2,
                                   ),
@@ -122,7 +109,7 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
                                     subTitle:
                                         'Confirming that you have completed the task cannot be undone',
                                     onConfirm: () => _submitCompletedTodo(
-                                        state.todos[index]),
+                                        state2.todos[index]),
                                     buttonConfirmText: 'Confirm',
                                   );
                                 },
