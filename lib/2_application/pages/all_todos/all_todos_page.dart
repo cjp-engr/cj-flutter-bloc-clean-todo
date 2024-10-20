@@ -21,7 +21,8 @@ class AllTodosPage extends StatelessWidget {
     return BlocConsumer<AllTodosBloc, AllTodosState>(
       listener: (context, state) {},
       builder: (context, state) {
-        if (state.status == BlocStatus.loading) {
+        if (state.status == BlocStatus.loading ||
+            state.status == BlocStatus.initial) {
           return const TodoProgressIndicator();
         }
         if (state.status == BlocStatus.error) {

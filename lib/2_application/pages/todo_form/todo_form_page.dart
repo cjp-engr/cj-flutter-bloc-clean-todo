@@ -89,7 +89,8 @@ class _TodoFormPageState extends State<TodoFormPage> {
       },
       builder: (context, state) {
         if (state.status == BlocStatus.initial ||
-            state.status == BlocStatus.loading) {
+            state.status == BlocStatus.loading ||
+            (state.status == BlocStatus.updated && state.todos.isEmpty)) {
           return const TodoProgressIndicator();
         }
         return TodoAppBar(
@@ -102,72 +103,68 @@ class _TodoFormPageState extends State<TodoFormPage> {
               },
             ),
           ),
-          body: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: context.padding +
-                    (Breakpoints.small.isActive(context)
-                        ? TodoSpacing.verySmall
-                        : TodoSpacing.small),
-              ),
-              child: Form(
-                key: _formKey,
-                autovalidateMode: _autovalidateMode,
-                child: state.status == BlocStatus.success
-                    ? ListView(
-                        children: [
-                          TodoText(
-                            text: widget.isAddForm
-                                ? 'Add New One!'
-                                : 'Update Todo',
-                            fontSize: TodoFontSize.veryLarge,
-                            fontWeight: FontWeight.bold,
-                            textAlign: TextAlign.start,
-                          ),
-                          const TodoText(
-                            text: 'Tell me about Your Task 😊',
-                            fontSize: TodoFontSize.veryLarge,
-                            color: Colors.black45,
-                            textAlign: TextAlign.start,
-                          ),
-                          const SizedBox(height: TodoSpacing.medium),
-                          TodoTextField(
-                            label: 'Title',
-                            controller: _titleController,
-                            initialValue: widget.isAddForm
-                                ? ''
-                                : state.todos[widget.index].title,
-                          ),
-                          const SizedBox(height: TodoSpacing.tiny),
-                          TodoTextField(
-                            label: 'Description',
-                            controller: _descriptionController,
-                            initialValue: widget.isAddForm
-                                ? ''
-                                : state.todos[widget.index].description,
-                            maxLines: 3,
-                          ),
-                          const SizedBox(height: TodoSpacing.medium),
-                          PrimaryButton(
-                            text: widget.isAddForm ? 'Create New' : 'Update',
-                            onPressed: () {
-                              _validateForm();
-                              widget.isAddForm
-                                  ? _submitAddTodo()
-                                  : _submitUpdateTodo(
-                                      state.todos[widget.index]);
-                            },
-                          ),
-                        ],
-                      )
-                    : const SizedBox(),
-              ),
+          body: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: context.padding +
+                  (Breakpoints.small.isActive(context)
+                      ? TodoSpacing.verySmall
+                      : TodoSpacing.small),
+            ),
+            child: Form(
+              key: _formKey,
+              autovalidateMode: _autovalidateMode,
+              child: state.status == BlocStatus.loaded ||
+                      state.status == BlocStatus.updated
+                  ? ListView(
+                      children: [
+                        TodoText(
+                          text:
+                              widget.isAddForm ? 'Add New One!' : 'Update Todo',
+                          fontSize: TodoFontSize.veryLarge,
+                          fontWeight: FontWeight.bold,
+                          textAlign: TextAlign.start,
+                        ),
+                        const TodoText(
+                          text: 'Tell me about Your Task 😊',
+                          fontSize: TodoFontSize.veryLarge,
+                          color: Colors.black45,
+                          textAlign: TextAlign.start,
+                        ),
+                        const SizedBox(height: TodoSpacing.medium),
+                        TodoTextField(
+                          label: 'Title',
+                          controller: _titleController,
+                          initialValue: widget.isAddForm
+                              ? ''
+                              : state.todos[widget.index].title,
+                        ),
+                        const SizedBox(height: TodoSpacing.tiny),
+                        TodoTextField(
+                          label: 'Description',
+                          controller: _descriptionController,
+                          initialValue: widget.isAddForm
+                              ? ''
+                              : state.todos[widget.index].description,
+                          maxLines: 3,
+                        ),
+                        const SizedBox(height: TodoSpacing.medium),
+                        PrimaryButton(
+                          text: widget.isAddForm ? 'Create New' : 'Update',
+                          onPressed: () {
+                            _validateForm();
+                            widget.isAddForm
+                                ? _submitAddTodo()
+                                : _submitUpdateTodo(state.todos[widget.index]);
+                          },
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
             ),
           ),
           floatingActionButton: widget.isAddForm || state.todos.isEmpty
               ? const SizedBox()
-              : _DeleteTodoWidget(state.todos[widget.index].id ?? '1'),
+              : _DeleteTodoWidget(state.todos[widget.index].id!),
         );
       },
     );

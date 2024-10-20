@@ -82,7 +82,7 @@ class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
         state.copyWith(status: BlocStatus.error),
       ),
       (todos) => emit(
-        state.copyWith(status: BlocStatus.success, todos: todos),
+        state.copyWith(status: BlocStatus.loaded, todos: todos),
       ),
     );
   }
