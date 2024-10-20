@@ -11,6 +11,7 @@ import 'package:frontend/2_application/core/utils/icon_const.dart';
 import 'package:frontend/2_application/core/widgets/app_bar.dart';
 import 'package:frontend/2_application/core/widgets/buttons.dart';
 import 'package:frontend/2_application/core/widgets/dialog.dart';
+import 'package:frontend/2_application/core/widgets/progress_indicator.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
@@ -87,6 +88,10 @@ class _TodoFormPageState extends State<TodoFormPage> {
         }
       },
       builder: (context, state) {
+        if (state.status == BlocStatus.initial ||
+            state.status == BlocStatus.loading) {
+          return const TodoProgressIndicator();
+        }
         return TodoAppBar(
           appBarLeading: Padding(
             padding: const EdgeInsets.all(TodoSpacing.verySmall),
@@ -144,37 +149,15 @@ class _TodoFormPageState extends State<TodoFormPage> {
                             maxLines: 3,
                           ),
                           const SizedBox(height: TodoSpacing.medium),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              PrimaryButton(
-                                text:
-                                    widget.isAddForm ? 'Create New' : 'Update',
-                                onPressed: () {
-                                  _validateForm();
-                                  widget.isAddForm
-                                      ? _submitAddTodo()
-                                      : _submitUpdateTodo(
-                                          state.todos[widget.index]);
-                                },
-                              ),
+                          PrimaryButton(
+                            text: widget.isAddForm ? 'Create New' : 'Update',
+                            onPressed: () {
+                              _validateForm();
                               widget.isAddForm
-                                  ? const SizedBox()
-                                  : SecondaryButton(
-                                      assetName: IconConst.drawer,
-                                      onPressed: () async {
-                                        showTodoDialog(
-                                          context,
-                                          title: 'Are you sure?',
-                                          subTitle:
-                                              'Deleting this task cannot be undone',
-                                          onConfirm: () => _deleteTodo(context,
-                                              state.todos[widget.index].id!),
-                                          buttonConfirmText: 'Confirm',
-                                        );
-                                      },
-                                    ),
-                            ],
+                                  ? _submitAddTodo()
+                                  : _submitUpdateTodo(
+                                      state.todos[widget.index]);
+                            },
                           ),
                         ],
                       )
@@ -182,6 +165,9 @@ class _TodoFormPageState extends State<TodoFormPage> {
               ),
             ),
           ),
+          floatingActionButton: widget.isAddForm || state.todos.isEmpty
+              ? const SizedBox()
+              : _DeleteTodoWidget(state.todos[widget.index].id ?? '1'),
         );
       },
     );
@@ -217,12 +203,31 @@ class _TodoFormPageState extends State<TodoFormPage> {
           ),
         );
   }
+}
+
+class _DeleteTodoWidget extends StatelessWidget {
+  final String id;
+  const _DeleteTodoWidget(this.id);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () async {
+        showTodoDialog(
+          context,
+          title: 'Are you sure?',
+          subTitle: 'Deleting this task cannot be undone',
+          onConfirm: () => _deleteTodo(context, id),
+          buttonConfirmText: 'Confirm',
+        );
+      },
+      label: const SecondaryButton(assetName: IconConst.drawer),
+    );
+  }
 
   void _deleteTodo(BuildContext context, String id) {
     context.read<AllTodosBloc>().add(
-          DeleteTodoEvent(
-            id: id,
-          ),
+          DeleteTodoEvent(id: id),
         );
   }
 }

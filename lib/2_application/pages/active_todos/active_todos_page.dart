@@ -34,18 +34,18 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
       },
       builder: (context, allTodoState) {
         return BlocConsumer<ActiveTodosBloc, ActiveTodosState>(
-          listener: (context, state1) {
-            if (state1.status == BlocStatus.updated) {
+          listener: (context, stateListen) {
+            if (stateListen.status == BlocStatus.updated) {
               context
                   .read<ActiveTodosBloc>()
-                  .add(ReadActiveTodosEvent(todos: state1.todos));
+                  .add(ReadActiveTodosEvent(todos: stateListen.todos));
             }
           },
-          builder: (context, state2) {
-            if (state2.status == BlocStatus.loading) {
+          builder: (context, stateBuild) {
+            if (stateBuild.status == BlocStatus.loading) {
               return const TodoProgressIndicator();
             }
-            if (state2.status == BlocStatus.error) {
+            if (stateBuild.status == BlocStatus.error) {
               return const Text('test you cannot register, sorry');
             }
 
@@ -65,17 +65,17 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TodoText(
-                      text: 'Active (${state2.todos.length})',
+                      text: 'Active (${stateBuild.todos.length})',
                       fontSize: TodoFontSize.extraLarge,
                       fontWeight: FontWeight.bold,
                     ),
                     const SizedBox(height: TodoSpacing.large),
-                    TodoTextField(label: 'Search...'),
+                    const _SearchTodoWidget(),
                     const SizedBox(height: TodoSpacing.large),
                     ListView.builder(
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: state2.todos.length,
+                      itemCount: stateBuild.todos.length,
                       itemBuilder: (context, index) => SizedBox(
                         height: 100,
                         child: Card(
@@ -89,11 +89,11 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
                                       height: TodoSpacing.extraSmall),
                                   TodoText(
                                     fontSize: TodoFontSize.veryLarge,
-                                    text: state2.todos[index].title,
+                                    text: stateBuild.todos[index].title,
                                     textAlign: TextAlign.left,
                                   ),
                                   TodoText(
-                                    text: state2.todos[index].description,
+                                    text: stateBuild.todos[index].description,
                                     textAlign: TextAlign.left,
                                     maxLines: 2,
                                   ),
@@ -109,7 +109,7 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
                                     subTitle:
                                         'Confirming that you have completed the task cannot be undone',
                                     onConfirm: () => _submitCompletedTodo(
-                                        state2.todos[index]),
+                                        stateBuild.todos[index]),
                                     buttonConfirmText: 'Confirm',
                                   );
                                 },
@@ -136,5 +136,14 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
             todo: todo.copyWith(isCompleted: true),
           ),
         );
+  }
+}
+
+class _SearchTodoWidget extends StatelessWidget {
+  const _SearchTodoWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return TodoTextField(label: 'Search Title or Description...');
   }
 }
