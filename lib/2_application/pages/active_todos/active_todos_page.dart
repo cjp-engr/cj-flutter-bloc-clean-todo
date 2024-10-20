@@ -24,7 +24,7 @@ class ActiveTodosPage extends StatefulWidget {
 class _ActiveTodosPageState extends State<ActiveTodosPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AllTodosBloc, AllTodosState>(
+    return BlocListener<AllTodosBloc, AllTodosState>(
       listener: (context, allTodoState) {
         if (allTodoState.status == BlocStatus.success) {
           context
@@ -32,101 +32,112 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
               .add(ReadActiveTodosEvent(todos: allTodoState.todos));
         }
       },
-      builder: (context, allTodoState) {
-        return BlocConsumer<ActiveTodosBloc, ActiveTodosState>(
-          listener: (context, stateListen) {
-            if (stateListen.status == BlocStatus.updated) {
-              context
-                  .read<ActiveTodosBloc>()
-                  .add(ReadActiveTodosEvent(todos: stateListen.todos));
-            }
-          },
-          builder: (context, stateBuild) {
-            if (stateBuild.status == BlocStatus.loading) {
-              return const TodoProgressIndicator();
-            }
-            if (stateBuild.status == BlocStatus.error) {
-              return const Text('test you cannot register, sorry');
-            }
+      child: BlocConsumer<ActiveTodosBloc, ActiveTodosState>(
+        listener: (context, stateListen) {
+          if (stateListen.status == BlocStatus.updated) {
+            context
+                .read<ActiveTodosBloc>()
+                .add(ReadActiveTodosEvent(todos: stateListen.todos));
+          }
+        },
+        builder: (context, stateBuild) {
+          if (stateBuild.status == BlocStatus.loading) {
+            return const TodoProgressIndicator();
+          }
+          if (stateBuild.status == BlocStatus.error) {
+            return const Text('test you cannot register, sorry');
+          }
 
-            return TodoAppBar(
-              appBarLeading: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: TodoSpacing.small),
-                child: SecondaryButton(
-                  assetName: IconConst.drawer,
-                  onPressed: () {},
-                ),
+          return TodoAppBar(
+            appBarLeading: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: TodoSpacing.small),
+              child: SecondaryButton(
+                assetName: IconConst.drawer,
+                onPressed: () {},
               ),
-              body: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: TodoSpacing.small),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TodoText(
-                      text: 'Active (${stateBuild.todos.length})',
-                      fontSize: TodoFontSize.extraLarge,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    const SizedBox(height: TodoSpacing.large),
-                    const _SearchTodoWidget(),
-                    const SizedBox(height: TodoSpacing.large),
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: stateBuild.todos.length,
-                      itemBuilder: (context, index) => SizedBox(
-                        height: 100,
-                        child: Card(
-                          child: Row(
-                            children: [
-                              const SizedBox(width: TodoSpacing.small),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                      height: TodoSpacing.extraSmall),
-                                  TodoText(
-                                    fontSize: TodoFontSize.veryLarge,
-                                    text: stateBuild.todos[index].title,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  TodoText(
-                                    text: stateBuild.todos[index].description,
-                                    textAlign: TextAlign.left,
-                                    maxLines: 2,
-                                  ),
-                                ],
+            ),
+            body: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: TodoSpacing.small),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TodoText(
+                    text: 'Active (${stateBuild.filteredTodos.length})',
+                    fontSize: TodoFontSize.extraLarge,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  const SizedBox(height: TodoSpacing.large),
+                  const _SearchTodoWidget(),
+                  const SizedBox(height: TodoSpacing.large),
+                  stateBuild.filteredTodos.isEmpty
+                      ? const Center(
+                          child: TodoText(
+                            text: 'No Active Todos',
+                            fontSize: TodoFontSize.medium,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        )
+                      : Flexible(
+                          child: ListView.builder(
+                            physics: const ScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: stateBuild.filteredTodos.length,
+                            itemBuilder: (context, index) => SizedBox(
+                              height: 100,
+                              child: Card(
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: TodoSpacing.small),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                            height: TodoSpacing.extraSmall),
+                                        TodoText(
+                                          fontSize: TodoFontSize.veryLarge,
+                                          text: stateBuild
+                                              .filteredTodos[index].title,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        TodoText(
+                                          text: stateBuild
+                                              .filteredTodos[index].description,
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    SecondaryButton(
+                                      assetName: IconConst.drawer,
+                                      onPressed: () async {
+                                        showTodoDialog(
+                                          context,
+                                          title: 'Are you sure?',
+                                          subTitle:
+                                              'Confirming that you have completed the task cannot be undone',
+                                          onConfirm: () => _submitCompletedTodo(
+                                              stateBuild.filteredTodos[index]),
+                                          buttonConfirmText: 'Confirm',
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(width: TodoSpacing.small),
+                                  ],
+                                ),
                               ),
-                              const Spacer(),
-                              SecondaryButton(
-                                assetName: IconConst.drawer,
-                                onPressed: () async {
-                                  showTodoDialog(
-                                    context,
-                                    title: 'Are you sure?',
-                                    subTitle:
-                                        'Confirming that you have completed the task cannot be undone',
-                                    onConfirm: () => _submitCompletedTodo(
-                                        stateBuild.todos[index]),
-                                    buttonConfirmText: 'Confirm',
-                                  );
-                                },
-                              ),
-                              const SizedBox(width: TodoSpacing.small),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
+                ],
               ),
-            );
-          },
-        );
-      },
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -144,6 +155,13 @@ class _SearchTodoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TodoTextField(label: 'Search Title or Description...');
+    return TodoTextField(
+      label: 'Search Title or Description...',
+      onChanged: (entered) {
+        context
+            .read<ActiveTodosBloc>()
+            .add(SearchActiveTodoEvent(searchTodo: entered));
+      },
+    );
   }
 }

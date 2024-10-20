@@ -14,6 +14,7 @@ class ActiveTodosBloc extends Bloc<ActiveTodosEvent, ActiveTodosState> {
   }) : super(ActiveTodosState.initialState()) {
     on<DoneTodoEvent>(_doneTodo);
     on<ReadActiveTodosEvent>(_readActiveTodos);
+    on<SearchActiveTodoEvent>(_searchActiveTodos);
   }
 
   Future<void> _doneTodo(
@@ -43,7 +44,11 @@ class ActiveTodosBloc extends Bloc<ActiveTodosEvent, ActiveTodosState> {
             return todo;
           },
         ).toList();
-        emit(state.copyWith(status: BlocStatus.updated, todos: todos));
+        emit(state.copyWith(
+          status: BlocStatus.updated,
+          todos: todos,
+          filteredTodos: todos,
+        ));
       },
     );
   }
@@ -56,6 +61,33 @@ class ActiveTodosBloc extends Bloc<ActiveTodosEvent, ActiveTodosState> {
 
     final activeTodos =
         event.todos.where((todo) => todo.isCompleted == false).toList();
-    emit(state.copyWith(todos: activeTodos, status: BlocStatus.success));
+    emit(state.copyWith(
+      todos: activeTodos,
+      filteredTodos: activeTodos,
+      status: BlocStatus.success,
+    ));
+  }
+
+  Future<void> _searchActiveTodos(
+    SearchActiveTodoEvent event,
+    Emitter<ActiveTodosState> emit,
+  ) async {
+    List<TodoEntity> filteredTodos = [];
+    emit(state.copyWith(status: BlocStatus.loading));
+    filteredTodos = state.todos.where((todo) {
+      return todo.title
+              .toLowerCase()
+              .contains(event.searchTodo.toLowerCase()) ||
+          todo.description
+              .toLowerCase()
+              .contains(event.searchTodo.toLowerCase());
+    }).toList();
+    if (event.searchTodo.isEmpty) {
+      emit(state.copyWith(
+          status: BlocStatus.success, filteredTodos: state.todos));
+    } else {
+      emit(state.copyWith(
+          status: BlocStatus.success, filteredTodos: filteredTodos));
+    }
   }
 }

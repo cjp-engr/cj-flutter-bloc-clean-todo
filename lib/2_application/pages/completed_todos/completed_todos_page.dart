@@ -49,50 +49,80 @@ class CompletedTodosPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TodoText(
-                    text: 'Completed (${state.todos.length})',
+                    text: 'Completed (${state.filteredTodos.length})',
                     fontSize: TodoFontSize.extraLarge,
                     fontWeight: FontWeight.bold,
                   ),
                   const SizedBox(height: TodoSpacing.large),
-                  TodoTextField(label: 'Search...'),
+                  const _SearchTodoWidget(),
                   const SizedBox(height: TodoSpacing.large),
-                  ListView.builder(
-                    physics: const ScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.todos.length,
-                    itemBuilder: (context, index) => SizedBox(
-                      height: 100,
-                      child: Card(
-                        child: Row(
-                          children: [
-                            const SizedBox(width: TodoSpacing.small),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: TodoSpacing.extraSmall),
-                                TodoText(
-                                  fontSize: TodoFontSize.veryLarge,
-                                  text: state.todos[index].title,
-                                  textAlign: TextAlign.left,
+                  state.filteredTodos.isEmpty
+                      ? const Center(
+                          child: TodoText(
+                            text: 'No Completed Todos',
+                            fontSize: TodoFontSize.medium,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        )
+                      : Flexible(
+                          child: ListView.builder(
+                            physics: const ScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: state.filteredTodos.length,
+                            itemBuilder: (context, index) => SizedBox(
+                              height: 100,
+                              child: Card(
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: TodoSpacing.small),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                            height: TodoSpacing.extraSmall),
+                                        TodoText(
+                                          fontSize: TodoFontSize.veryLarge,
+                                          text:
+                                              state.filteredTodos[index].title,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        TodoText(
+                                          text: state
+                                              .filteredTodos[index].description,
+                                          textAlign: TextAlign.left,
+                                          maxLines: 2,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                TodoText(
-                                  text: state.todos[index].description,
-                                  textAlign: TextAlign.left,
-                                  maxLines: 2,
-                                ),
-                              ],
+                              ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class _SearchTodoWidget extends StatelessWidget {
+  const _SearchTodoWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return TodoTextField(
+      label: 'Search Title or Description...',
+      onChanged: (entered) {
+        context
+            .read<CompletedTodoBloc>()
+            .add(SearchCompletedTodoEvent(searchTodo: entered));
+      },
     );
   }
 }

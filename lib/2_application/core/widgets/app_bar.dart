@@ -28,6 +28,7 @@ class TodoAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         floatingActionButton: floatingActionButton,
         appBar: AppBar(
           leading: appBarLeading,
