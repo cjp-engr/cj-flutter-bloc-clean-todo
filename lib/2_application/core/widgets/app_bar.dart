@@ -27,26 +27,29 @@ class TodoAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        floatingActionButton: floatingActionButton,
-        appBar: AppBar(
-          leading: appBarLeading,
-          title: appBarTitle,
-          actions: [...appBarActions ?? [], SizedBox(width: context.padding)],
-        ),
-        body: AdaptiveLayout(
-          body: SlotLayout(
-            config: <Breakpoint, SlotLayoutConfig>{
-              Breakpoints.small: SlotLayout.from(
-                key: const Key('smallBody'),
-                builder: (_) => body ?? const SizedBox(),
-              ),
-              Breakpoints.mediumAndUp: SlotLayout.from(
-                key: const Key('mediumAndUpBody'),
-                builder: (_) => SingleChildScrollView(child: body!),
-              ),
-            },
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          floatingActionButton: floatingActionButton,
+          appBar: AppBar(
+            leading: appBarLeading,
+            title: appBarTitle,
+            actions: [...appBarActions ?? [], SizedBox(width: context.padding)],
+          ),
+          body: AdaptiveLayout(
+            body: SlotLayout(
+              config: <Breakpoint, SlotLayoutConfig>{
+                Breakpoints.small: SlotLayout.from(
+                  key: const Key('smallBody'),
+                  builder: (_) => body ?? const SizedBox(),
+                ),
+                Breakpoints.mediumAndUp: SlotLayout.from(
+                  key: const Key('mediumAndUpBody'),
+                  builder: (_) => SingleChildScrollView(child: body!),
+                ),
+              },
+            ),
           ),
         ),
       ),
