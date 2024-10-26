@@ -13,6 +13,7 @@ import 'package:frontend/2_application/pages/completed_todos/bloc/completed_todo
 import 'package:frontend/2_application/pages/completed_todos/completed_todos_page.dart';
 import 'package:frontend/2_application/pages/login/login_page.dart';
 import 'package:frontend/2_application/pages/register/register_page.dart';
+import 'package:frontend/2_application/pages/settings/settings_page.dart';
 import 'package:frontend/2_application/pages/todo_form/todo_form_page.dart';
 import 'package:frontend/injection.dart';
 import 'package:go_router/go_router.dart';
@@ -30,8 +31,8 @@ Future<GoRouter> routerFactory(FlutterSecureStorage storage) async {
   final accessToken = await storage.read(key: SecureStorageKeys.accessToken);
   return GoRouter(
     initialLocation: accessToken?.isNotEmpty ?? false
-        ? '/${TodoRouteName.allTodo}'
-        : '/${TodoRouteName.login}',
+        ? TodoRouteName.allTodo.path
+        : TodoRouteName.login.path,
     navigatorKey: _rootNavigatorKey,
     observers: [
       GoRouterObserver(),
@@ -40,8 +41,9 @@ Future<GoRouter> routerFactory(FlutterSecureStorage storage) async {
       _login(),
       _register(),
       _todoForm(),
+      _settings(),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) {
+        builder: (_, __, navigationShell) {
           return TodoNavigationBar(navigationShell: navigationShell);
         },
         branches: [
@@ -56,8 +58,8 @@ Future<GoRouter> routerFactory(FlutterSecureStorage storage) async {
 
 GoRoute _login() {
   return GoRoute(
-    path: '/${TodoRouteName.login}',
-    name: TodoRouteName.login,
+    path: TodoRouteName.login.path,
+    name: TodoRouteName.login.name,
     pageBuilder: (context, state) => const NoTransitionPage(
       child: LoginPageWrapperProvider(),
     ),
@@ -66,29 +68,40 @@ GoRoute _login() {
 
 GoRoute _todoForm() {
   return GoRoute(
-    path: '/${TodoRouteName.todoForm}/:action/:index',
-    name: TodoRouteName.todoForm,
+    path: '${TodoRouteName.todoForm.path}/:action/:index',
+    name: TodoRouteName.todoForm.name,
     pageBuilder: (context, state) {
-      return state.pathParameters['action'] == 'add'
-          ? const NoTransitionPage(
-              child: TodoFormPageWrapperProvider(isAddForm: true, index: -1),
-            )
-          : NoTransitionPage(
-              child: TodoFormPageWrapperProvider(
-                isAddForm: false,
-                index: int.tryParse(state.pathParameters['index']!)!,
-              ),
-            );
+      return NoTransitionPage(
+        child: BlocProvider(
+          create: (context) => sl<AllTodosBloc>(),
+          child: state.pathParameters['action'] == 'add'
+              ? const TodoFormPage(isAddForm: true, index: -1)
+              : TodoFormPage(
+                  isAddForm: false,
+                  index: int.tryParse(state.pathParameters['index']!)!,
+                ),
+        ),
+      );
     },
   );
 }
 
 GoRoute _register() {
   return GoRoute(
-    path: '/${TodoRouteName.register}',
-    name: TodoRouteName.register,
+    path: TodoRouteName.register.path,
+    name: TodoRouteName.register.name,
     pageBuilder: (context, state) => const NoTransitionPage(
       child: RegisterPageWrapperProvider(),
+    ),
+  );
+}
+
+GoRoute _settings() {
+  return GoRoute(
+    path: TodoRouteName.settings.path,
+    name: TodoRouteName.settings.name,
+    pageBuilder: (context, state) => const NoTransitionPage(
+      child: SettingsPage(),
     ),
   );
 }
@@ -98,8 +111,8 @@ StatefulShellBranch _allTodos() {
     navigatorKey: _shellNavigatorAllTodosKey,
     routes: [
       GoRoute(
-        path: '/${TodoRouteName.allTodo}',
-        name: TodoRouteName.allTodo,
+        path: TodoRouteName.allTodo.path,
+        name: TodoRouteName.allTodo.name,
         pageBuilder: (context, state) {
           return MaterialPage<void>(
             key: UniqueKey(),
@@ -118,14 +131,15 @@ StatefulShellBranch _activeTodos() {
     navigatorKey: _shellNavigatorActiveTodosKey,
     routes: [
       GoRoute(
-        path: '/${TodoRouteName.activeTodo}',
-        name: TodoRouteName.activeTodo,
+        path: TodoRouteName.activeTodo.path,
+        name: TodoRouteName.activeTodo.name,
         pageBuilder: (context, state) {
           return MaterialPage<void>(
+            key: UniqueKey(),
             child: MultiBlocProvider(
               providers: [
-                BlocProvider(create: (_) => sl<ActiveTodosBloc>()),
                 BlocProvider(create: (_) => sl<AllTodosBloc>()),
+                BlocProvider(create: (_) => sl<ActiveTodosBloc>()),
               ],
               child: const ActiveTodosPage(),
             ),
@@ -141,15 +155,15 @@ StatefulShellBranch _completedTodos() {
     navigatorKey: _shellNavigatorCompletedTodosKey,
     routes: [
       GoRoute(
-        path: '/${TodoRouteName.completedTodo}',
-        name: TodoRouteName.completedTodo,
+        path: TodoRouteName.completedTodo.path,
+        name: TodoRouteName.completedTodo.name,
         pageBuilder: (context, state) {
           return MaterialPage<void>(
               key: UniqueKey(),
               child: MultiBlocProvider(
                 providers: [
-                  BlocProvider(create: (_) => sl<CompletedTodoBloc>()),
                   BlocProvider(create: (_) => sl<AllTodosBloc>()),
+                  BlocProvider(create: (_) => sl<CompletedTodoBloc>()),
                 ],
                 child: const CompletedTodosPage(),
               ));

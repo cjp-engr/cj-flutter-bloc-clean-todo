@@ -18,8 +18,7 @@ class AllTodosPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AllTodosBloc, AllTodosState>(
-      listener: (context, state) {},
+    return BlocBuilder<AllTodosBloc, AllTodosState>(
       builder: (context, state) {
         if (state.status == BlocStatus.loading ||
             state.status == BlocStatus.initial) {
@@ -34,7 +33,11 @@ class AllTodosPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: TodoSpacing.small),
             child: SecondaryButton(
               assetName: IconConst.drawer,
-              onPressed: () {},
+              onPressed: () {
+                context.goNamed(
+                  TodoRouteName.settings.name,
+                );
+              },
             ),
           ),
           body: Padding(
@@ -72,7 +75,7 @@ class _AddTodoWidget extends StatelessWidget {
     return FloatingActionButton.extended(
       onPressed: () {
         context.goNamed(
-          TodoRouteName.todoForm,
+          TodoRouteName.todoForm.name,
           pathParameters: {
             'action': 'add',
             'index': ' ',

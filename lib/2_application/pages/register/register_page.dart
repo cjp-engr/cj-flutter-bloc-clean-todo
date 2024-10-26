@@ -68,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return BlocConsumer<RegisterBloc, RegisterState>(
       listener: (context, state) {
         if (state.status == BlocStatus.success) {
-          context.goNamed(TodoRouteName.allTodo);
+          context.goNamed(TodoRouteName.allTodo.name);
           BlocProvider.of<LoginCubit>(context).isLoggedIn();
         }
       },
@@ -224,7 +224,7 @@ class _ButtonsWidget extends StatelessWidget {
             TodoText(text: '${context.appLocalization.haveAnAccount} '),
             InkWell(
               onTap: () {
-                context.goNamed(TodoRouteName.login);
+                context.goNamed(TodoRouteName.login.name);
               },
               child: TodoText(text: context.appLocalization.login),
             ),

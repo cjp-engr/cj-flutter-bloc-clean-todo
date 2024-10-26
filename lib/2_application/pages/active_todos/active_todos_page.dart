@@ -4,6 +4,7 @@ import 'package:frontend/1_domain/entities/todo_entity.dart';
 import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
 import 'package:frontend/2_application/core/extension/bloc_api_status.dart';
+import 'package:frontend/2_application/core/routes/route_name.dart';
 import 'package:frontend/2_application/core/utils/icon_const.dart';
 import 'package:frontend/2_application/core/widgets/app_bar.dart';
 import 'package:frontend/2_application/core/widgets/buttons.dart';
@@ -13,6 +14,7 @@ import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
 import 'package:frontend/2_application/pages/active_todos/bloc/active_todos_bloc.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ActiveTodosPage extends StatefulWidget {
   const ActiveTodosPage({super.key});
@@ -26,7 +28,9 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
   Widget build(BuildContext context) {
     return BlocListener<AllTodosBloc, AllTodosState>(
       listener: (context, allTodoState) {
-        if (allTodoState.status == BlocStatus.success) {
+        print(allTodoState.status);
+        if (allTodoState.status == BlocStatus.success ||
+            allTodoState.status == BlocStatus.loaded) {
           context
               .read<ActiveTodosBloc>()
               .add(ReadActiveTodosEvent(todos: allTodoState.todos));
@@ -54,7 +58,11 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
                   const EdgeInsets.symmetric(horizontal: TodoSpacing.small),
               child: SecondaryButton(
                 assetName: IconConst.drawer,
-                onPressed: () {},
+                onPressed: () {
+                  context.goNamed(
+                    TodoRouteName.settings.name,
+                  );
+                },
               ),
             ),
             body: Padding(

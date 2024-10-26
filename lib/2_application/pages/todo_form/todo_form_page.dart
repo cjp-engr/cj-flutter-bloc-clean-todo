@@ -15,29 +15,7 @@ import 'package:frontend/2_application/core/widgets/progress_indicator.dart';
 import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
-import 'package:frontend/injection.dart';
 import 'package:go_router/go_router.dart';
-
-class TodoFormPageWrapperProvider extends StatelessWidget {
-  final bool isAddForm;
-  final int index;
-  const TodoFormPageWrapperProvider({
-    super.key,
-    required this.isAddForm,
-    required this.index,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<AllTodosBloc>(),
-      child: TodoFormPage(
-        isAddForm: isAddForm,
-        index: index,
-      ),
-    );
-  }
-}
 
 class TodoFormPage extends StatefulWidget {
   final bool isAddForm;
@@ -84,7 +62,7 @@ class _TodoFormPageState extends State<TodoFormPage> {
         }
 
         if (state.status == BlocStatus.updated) {
-          context.goNamed(TodoRouteName.allTodo);
+          context.goNamed(TodoRouteName.allTodo.name);
         }
       },
       builder: (context, state) {
@@ -99,7 +77,7 @@ class _TodoFormPageState extends State<TodoFormPage> {
             child: SecondaryButton(
               assetName: IconConst.back,
               onPressed: () {
-                context.goNamed(TodoRouteName.allTodo);
+                context.goNamed(TodoRouteName.allTodo.name);
               },
             ),
           ),

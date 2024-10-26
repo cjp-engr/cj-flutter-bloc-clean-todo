@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
 import 'package:frontend/2_application/core/extension/bloc_api_status.dart';
+import 'package:frontend/2_application/core/routes/route_name.dart';
 import 'package:frontend/2_application/core/utils/icon_const.dart';
 import 'package:frontend/2_application/core/widgets/app_bar.dart';
 import 'package:frontend/2_application/core/widgets/buttons.dart';
@@ -11,6 +12,7 @@ import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
 import 'package:frontend/2_application/pages/completed_todos/bloc/completed_todo_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CompletedTodosPage extends StatelessWidget {
   const CompletedTodosPage({super.key});
@@ -19,7 +21,8 @@ class CompletedTodosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AllTodosBloc, AllTodosState>(
       listener: (context, allTodoState) {
-        if (allTodoState.status == BlocStatus.success) {
+        if (allTodoState.status == BlocStatus.success ||
+            allTodoState.status == BlocStatus.loaded) {
           context
               .read<CompletedTodoBloc>()
               .add(ReadCompletedTodosEvent(todos: allTodoState.todos));
@@ -39,7 +42,11 @@ class CompletedTodosPage extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: TodoSpacing.small),
               child: SecondaryButton(
                 assetName: IconConst.drawer,
-                onPressed: () {},
+                onPressed: () {
+                  context.goNamed(
+                    TodoRouteName.settings.name,
+                  );
+                },
               ),
             ),
             body: Padding(

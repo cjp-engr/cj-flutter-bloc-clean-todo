@@ -49,7 +49,7 @@ class ListWidget extends StatelessWidget {
               InkWell(
                 onTap: () {
                   context.goNamed(
-                    TodoRouteName.todoForm,
+                    TodoRouteName.todoForm.name,
                     pathParameters: {
                       'action': 'edit',
                       'index': index.toString(),
