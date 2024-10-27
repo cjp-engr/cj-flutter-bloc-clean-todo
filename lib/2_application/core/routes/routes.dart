@@ -9,7 +9,6 @@ import 'package:frontend/2_application/pages/active_todos/active_todos_page.dart
 import 'package:frontend/2_application/pages/all_todos/all_todos_page.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
 import 'package:frontend/2_application/pages/completed_todos/completed_todos_page.dart';
-import 'package:frontend/2_application/pages/details/todo_details_page.dart';
 import 'package:frontend/2_application/pages/login/login_page.dart';
 import 'package:frontend/2_application/pages/register/register_page.dart';
 import 'package:frontend/2_application/pages/settings/settings_page.dart';
@@ -38,7 +37,6 @@ Future<GoRouter> routerFactory(FlutterSecureStorage storage) async {
       _login(),
       _register(),
       _todoForm(),
-      _todoDetails(),
       _settings(),
       ShellRoute(
           navigatorKey: GlobalKey<NavigatorState>(),
@@ -74,18 +72,6 @@ GoRoute _todoForm() {
                   index: int.tryParse(state.pathParameters['index']!)!,
                 ),
         ),
-      );
-    },
-  );
-}
-
-GoRoute _todoDetails() {
-  return GoRoute(
-    path: '${TodoRouteName.todoDetails.path}/:index',
-    name: TodoRouteName.todoDetails.name,
-    pageBuilder: (context, state) {
-      return const NoTransitionPage(
-        child: TodoDetailsPage(),
       );
     },
   );

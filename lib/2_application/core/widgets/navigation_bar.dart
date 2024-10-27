@@ -57,15 +57,18 @@ class _TodoNavigationBarState extends State<TodoNavigationBar> {
             currentIndex: currentIndex,
             items: [
               BottomNavigationBarItem(
-                icon: BottomIconWidget(isActive: currentIndex == 0),
+                icon: BottomIconWidget(
+                    icon: IconConst.all, isActive: currentIndex == 0),
                 label: 'All',
               ),
               BottomNavigationBarItem(
-                icon: BottomIconWidget(isActive: currentIndex == 1),
+                icon: BottomIconWidget(
+                    icon: IconConst.active, isActive: currentIndex == 1),
                 label: 'Active',
               ),
               BottomNavigationBarItem(
-                icon: BottomIconWidget(isActive: currentIndex == 2),
+                icon: BottomIconWidget(
+                    icon: IconConst.done, isActive: currentIndex == 2),
                 label: 'Done',
               ),
             ],
@@ -78,13 +81,15 @@ class _TodoNavigationBarState extends State<TodoNavigationBar> {
 
 class BottomIconWidget extends StatelessWidget {
   final bool isActive;
-  const BottomIconWidget({super.key, required this.isActive});
+  final String icon;
+  const BottomIconWidget(
+      {super.key, required this.isActive, required this.icon});
 
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-      IconConst.drawer,
-      scale: 5,
+      icon,
+      scale: 3,
       color: isActive
           ? TodoColor.elevatedButtonColorLight
           : TodoColor.lightOnPrimaryColor,

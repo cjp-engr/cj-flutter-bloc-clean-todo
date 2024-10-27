@@ -57,7 +57,7 @@ class CompletedTodosPage extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(horizontal: TodoSpacing.small),
               child: SecondaryButton(
-                assetName: IconConst.drawer,
+                assetName: IconConst.setting,
                 onPressed: () {
                   context.goNamed(
                     TodoRouteName.settings.name,
