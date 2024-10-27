@@ -91,7 +91,6 @@ class AllTodosBloc extends Bloc<AllTodosEvent, AllTodosState> {
     DeleteTodoEvent event,
     Emitter<AllTodosState> emit,
   ) async {
-    print('test delete');
     emit(state.copyWith(status: BlocStatus.loading));
     final failureOrSuccess = await deleteTodoUC.call(event.id);
     failureOrSuccess.fold(

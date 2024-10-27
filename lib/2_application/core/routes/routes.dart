@@ -6,11 +6,10 @@ import 'package:frontend/2_application/core/routes/router_observer.dart';
 import 'package:frontend/2_application/core/storage/secure_storage.dart';
 import 'package:frontend/2_application/core/widgets/navigation_bar.dart';
 import 'package:frontend/2_application/pages/active_todos/active_todos_page.dart';
-import 'package:frontend/2_application/pages/active_todos/bloc/active_todos_bloc.dart';
 import 'package:frontend/2_application/pages/all_todos/all_todos_page.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
-import 'package:frontend/2_application/pages/completed_todos/bloc/completed_todo_bloc.dart';
 import 'package:frontend/2_application/pages/completed_todos/completed_todos_page.dart';
+import 'package:frontend/2_application/pages/details/todo_details_page.dart';
 import 'package:frontend/2_application/pages/login/login_page.dart';
 import 'package:frontend/2_application/pages/register/register_page.dart';
 import 'package:frontend/2_application/pages/settings/settings_page.dart';
@@ -19,16 +18,14 @@ import 'package:frontend/injection.dart';
 import 'package:go_router/go_router.dart';
 
 GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
-GlobalKey<NavigatorState> _shellNavigatorAllTodosKey =
-    GlobalKey<NavigatorState>(debugLabel: 'shellNavigatorAllTodosKey');
-GlobalKey<NavigatorState> _shellNavigatorActiveTodosKey =
-    GlobalKey<NavigatorState>(debugLabel: 'shellNavigatorActiveTodosKey');
-
-GlobalKey<NavigatorState> _shellNavigatorCompletedTodosKey =
-    GlobalKey<NavigatorState>(debugLabel: 'shellNavigatorCompletedTodosKey');
-
 Future<GoRouter> routerFactory(FlutterSecureStorage storage) async {
   final accessToken = await storage.read(key: SecureStorageKeys.accessToken);
+  List<GoRoute> bottomNavigationBranches = [
+    _allTodos(),
+    _activeTodos(),
+    _completedTodos(),
+  ];
+  //https://github.com/NonymousMorlock/shell_routing_practice?tab=readme-ov-file
   return GoRouter(
     initialLocation: accessToken?.isNotEmpty ?? false
         ? TodoRouteName.allTodo.path
@@ -41,17 +38,13 @@ Future<GoRouter> routerFactory(FlutterSecureStorage storage) async {
       _login(),
       _register(),
       _todoForm(),
+      _todoDetails(),
       _settings(),
-      StatefulShellRoute.indexedStack(
-        builder: (_, __, navigationShell) {
-          return TodoNavigationBar(navigationShell: navigationShell);
-        },
-        branches: [
-          _allTodos(),
-          _activeTodos(),
-          _completedTodos(),
-        ],
-      ),
+      ShellRoute(
+          navigatorKey: GlobalKey<NavigatorState>(),
+          builder: (_, state, child) =>
+              TodoNavigationBar(state: state, child: child),
+          routes: bottomNavigationBranches),
     ],
   );
 }
@@ -86,6 +79,18 @@ GoRoute _todoForm() {
   );
 }
 
+GoRoute _todoDetails() {
+  return GoRoute(
+    path: '${TodoRouteName.todoDetails.path}/:index',
+    name: TodoRouteName.todoDetails.name,
+    pageBuilder: (context, state) {
+      return const NoTransitionPage(
+        child: TodoDetailsPage(),
+      );
+    },
+  );
+}
+
 GoRoute _register() {
   return GoRoute(
     path: TodoRouteName.register.path,
@@ -106,69 +111,54 @@ GoRoute _settings() {
   );
 }
 
-StatefulShellBranch _allTodos() {
-  return StatefulShellBranch(
-    navigatorKey: _shellNavigatorAllTodosKey,
-    routes: [
-      GoRoute(
-        path: TodoRouteName.allTodo.path,
-        name: TodoRouteName.allTodo.name,
-        pageBuilder: (context, state) {
-          return MaterialPage<void>(
-            key: UniqueKey(),
-            child: MultiBlocProvider(providers: [
-              BlocProvider(create: (_) => sl<AllTodosBloc>()),
-            ], child: const AllTodosPage()),
-          );
-        },
-      ),
-    ],
+GoRoute _allTodos() {
+  return GoRoute(
+    path: TodoRouteName.allTodo.path,
+    name: TodoRouteName.allTodo.name,
+    pageBuilder: (context, state) => _buildPageWithDefaultTransition<void>(
+      context: context,
+      state: state,
+      child: const AllTodosPageWrapper(),
+    ),
   );
 }
 
-StatefulShellBranch _activeTodos() {
-  return StatefulShellBranch(
-    navigatorKey: _shellNavigatorActiveTodosKey,
-    routes: [
-      GoRoute(
-        path: TodoRouteName.activeTodo.path,
-        name: TodoRouteName.activeTodo.name,
-        pageBuilder: (context, state) {
-          return MaterialPage<void>(
-            key: UniqueKey(),
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider(create: (_) => sl<AllTodosBloc>()),
-                BlocProvider(create: (_) => sl<ActiveTodosBloc>()),
-              ],
-              child: const ActiveTodosPage(),
-            ),
-          );
-        },
-      ),
-    ],
+GoRoute _activeTodos() {
+  return GoRoute(
+    path: TodoRouteName.activeTodo.path,
+    name: TodoRouteName.activeTodo.name,
+    pageBuilder: (context, state) => _buildPageWithDefaultTransition<void>(
+      context: context,
+      state: state,
+      child: const ActiveTodosPageWrapper(),
+    ),
   );
 }
 
-StatefulShellBranch _completedTodos() {
-  return StatefulShellBranch(
-    navigatorKey: _shellNavigatorCompletedTodosKey,
-    routes: [
-      GoRoute(
-        path: TodoRouteName.completedTodo.path,
-        name: TodoRouteName.completedTodo.name,
-        pageBuilder: (context, state) {
-          return MaterialPage<void>(
-              key: UniqueKey(),
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider(create: (_) => sl<AllTodosBloc>()),
-                  BlocProvider(create: (_) => sl<CompletedTodoBloc>()),
-                ],
-                child: const CompletedTodosPage(),
-              ));
-        },
-      ),
-    ],
+GoRoute _completedTodos() {
+  return GoRoute(
+    path: TodoRouteName.completedTodo.path,
+    name: TodoRouteName.completedTodo.name,
+    pageBuilder: (context, state) => _buildPageWithDefaultTransition<void>(
+      context: context,
+      state: state,
+      child: const CompletedTodosPageWrapper(),
+    ),
+  );
+}
+
+CustomTransitionPage _buildPageWithDefaultTransition<T>({
+  required BuildContext context,
+  required GoRouterState state,
+  required Widget child,
+}) {
+  return CustomTransitionPage<T>(
+    key: state.pageKey,
+    child: child,
+    transitionDuration: const Duration(milliseconds: 150),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+        FadeTransition(
+            opacity: CurveTween(curve: Curves.bounceInOut).animate(animation),
+            child: child),
   );
 }

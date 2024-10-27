@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:frontend/2_application/core/routes/route_name.dart';
 import 'package:frontend/2_application/core/utils/color.dart';
-import 'package:frontend/2_application/core/widgets/text.dart';
+import 'package:frontend/2_application/core/utils/icon_const.dart';
+
 import 'package:go_router/go_router.dart';
 
-class TodoNavigationBar extends StatelessWidget {
-  final StatefulNavigationShell? navigationShell;
-  const TodoNavigationBar({
-    Key? key,
-    this.navigationShell,
-  }) : super(key: key ?? const ValueKey<String>('TodoNavigationBar'));
+class TodoNavigationBar extends StatefulWidget {
+  const TodoNavigationBar(
+      {required this.child, required this.state, super.key});
+
+  final Widget child;
+  final GoRouterState state;
+
+  @override
+  State<TodoNavigationBar> createState() => _TodoNavigationBarState();
+}
+
+class _TodoNavigationBarState extends State<TodoNavigationBar> {
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -19,63 +28,66 @@ class TodoNavigationBar extends StatelessWidget {
           Breakpoints.small: SlotLayout.from(
             key: const Key('smallNavigationShell'),
             builder: (_) => SizedBox(
-              child: navigationShell,
+              child: widget.child,
             ),
           ),
         },
       ),
-      bottomNavigation: SlotLayout(
-        config: <Breakpoint, SlotLayoutConfig>{
-          Breakpoints.small: SlotLayout.from(
-            key: const Key('smallBottomNavigation'),
-            builder: (_) => _CustomBottomNavigation(navigationShell),
+      bottomNavigation: SlotLayout(config: <Breakpoint, SlotLayoutConfig>{
+        Breakpoints.small: SlotLayout.from(
+          key: const Key('smallBottomNavigation'),
+          builder: (_) => BottomNavigationBar(
+            selectedItemColor: TodoColor.elevatedButtonColorLight,
+            unselectedItemColor: TodoColor.lightOnPrimaryColor,
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            iconSize: 0,
+            type: BottomNavigationBarType.fixed,
+            onTap: (index) {
+              currentIndex = index;
+              switch (index) {
+                case 0:
+                  context.goNamed(TodoRouteName.allTodo.name);
+                case 1:
+                  context.goNamed(TodoRouteName.activeTodo.name);
+                case 2:
+                  context.goNamed(TodoRouteName.completedTodo.name);
+              }
+            },
+            currentIndex: currentIndex,
+            items: [
+              BottomNavigationBarItem(
+                icon: BottomIconWidget(isActive: currentIndex == 0),
+                label: 'All',
+              ),
+              BottomNavigationBarItem(
+                icon: BottomIconWidget(isActive: currentIndex == 1),
+                label: 'Active',
+              ),
+              BottomNavigationBarItem(
+                icon: BottomIconWidget(isActive: currentIndex == 2),
+                label: 'Done',
+              ),
+            ],
           ),
-        },
-      ),
+        ),
+      }),
     );
   }
 }
 
-class _CustomBottomNavigation extends StatelessWidget {
-  final StatefulNavigationShell? navigationShell;
-  const _CustomBottomNavigation(this.navigationShell);
+class BottomIconWidget extends StatelessWidget {
+  final bool isActive;
+  const BottomIconWidget({super.key, required this.isActive});
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: navigationShell!.currentIndex,
-      onTap: (index) => _onDestinationSelected(index),
-      selectedItemColor: TodoColor.lightOnPrimaryColor,
-      unselectedItemColor: TodoColor.lightPrimaryVariantColor,
-      items: _bottomNavigationList(context),
-      selectedFontSize: 0,
-      unselectedFontSize: 0,
-      iconSize: 0,
+    return Image.asset(
+      IconConst.drawer,
+      scale: 5,
+      color: isActive
+          ? TodoColor.elevatedButtonColorLight
+          : TodoColor.lightOnPrimaryColor,
     );
-  }
-
-  void _onDestinationSelected(int index) {
-    navigationShell!.goBranch(
-      index,
-      initialLocation: index == navigationShell!.currentIndex,
-    );
-  }
-
-  List<BottomNavigationBarItem> _bottomNavigationList(BuildContext context) {
-    return [
-      const BottomNavigationBarItem(
-        icon: TodoText(text: 'All'),
-        label: '',
-      ),
-      const BottomNavigationBarItem(
-        icon: TodoText(text: 'Active'),
-        label: '',
-      ),
-      const BottomNavigationBarItem(
-        icon: TodoText(text: 'Completed'),
-        label: '',
-      ),
-    ];
   }
 }

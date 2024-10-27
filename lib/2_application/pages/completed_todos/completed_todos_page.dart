@@ -12,7 +12,23 @@ import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
 import 'package:frontend/2_application/pages/completed_todos/bloc/completed_todo_bloc.dart';
+import 'package:frontend/injection.dart';
 import 'package:go_router/go_router.dart';
+
+class CompletedTodosPageWrapper extends StatelessWidget {
+  const CompletedTodosPageWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => sl<AllTodosBloc>()),
+        BlocProvider(create: (_) => sl<CompletedTodoBloc>()),
+      ],
+      child: const CompletedTodosPage(),
+    );
+  }
+}
 
 class CompletedTodosPage extends StatelessWidget {
   const CompletedTodosPage({super.key});

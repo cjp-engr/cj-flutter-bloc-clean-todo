@@ -14,7 +14,20 @@ import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
 import 'package:frontend/2_application/pages/active_todos/bloc/active_todos_bloc.dart';
 import 'package:frontend/2_application/pages/all_todos/bloc/all_todos_bloc.dart';
+import 'package:frontend/injection.dart';
 import 'package:go_router/go_router.dart';
+
+class ActiveTodosPageWrapper extends StatelessWidget {
+  const ActiveTodosPageWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(providers: [
+      BlocProvider(create: (_) => sl<AllTodosBloc>()),
+      BlocProvider(create: (_) => sl<ActiveTodosBloc>()),
+    ], child: const ActiveTodosPage());
+  }
+}
 
 class ActiveTodosPage extends StatefulWidget {
   const ActiveTodosPage({super.key});
@@ -28,7 +41,6 @@ class _ActiveTodosPageState extends State<ActiveTodosPage> {
   Widget build(BuildContext context) {
     return BlocListener<AllTodosBloc, AllTodosState>(
       listener: (context, allTodoState) {
-        print(allTodoState.status);
         if (allTodoState.status == BlocStatus.success ||
             allTodoState.status == BlocStatus.loaded) {
           context

@@ -79,14 +79,12 @@ Future<bool?> showTodoDialog(
   return showDialog<bool>(
     context: context,
     barrierDismissible: false,
-    builder: (_) {
-      return _TodoDialog(
-        title: title,
-        subTitle: subTitle,
-        onConfirm: onConfirm,
-        buttonCancelText: buttonCancelText,
-        buttonConfirmText: buttonConfirmText,
-      );
-    },
+    builder: (_) => _TodoDialog(
+      title: title,
+      subTitle: subTitle,
+      onConfirm: onConfirm,
+      buttonCancelText: buttonCancelText,
+      buttonConfirmText: buttonConfirmText,
+    ),
   );
 }
