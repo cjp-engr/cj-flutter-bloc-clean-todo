@@ -25,13 +25,23 @@ class UserRepoImpl implements UserRepo {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> loggedInExistingUserFromDataSource(
+  Future<Either<Failure, String>> loggedInExistingUserFromDataSource(
       UserEntity user) async {
     try {
       final result = await userRemoteDatasource.loggedInUserFromDatabase(user);
       return right(result);
     } on ServerException catch (_) {
       return left(ServerFailure());
+    } catch (_) {
+      return left(GeneralFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserEntity>> userDetailsFromDataSource() async {
+    try {
+      final result = await userRemoteDatasource.userDetailsFromDatabase();
+      return right(result);
     } catch (_) {
       return left(GeneralFailure());
     }

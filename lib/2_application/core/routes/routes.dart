@@ -92,7 +92,7 @@ GoRoute _settings() {
     path: TodoRouteName.settings.path,
     name: TodoRouteName.settings.name,
     pageBuilder: (context, state) => const NoTransitionPage(
-      child: SettingsPage(),
+      child: SettingsPageWrapper(),
     ),
   );
 }

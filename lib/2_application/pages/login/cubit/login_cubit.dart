@@ -22,7 +22,7 @@ class LoginCubit extends Cubit<LoginState> {
       (failure) => emit(
         state.copyWith(status: BlocStatus.error),
       ),
-      (user) {
+      (id) {
         emit(state.copyWith(status: BlocStatus.success));
       },
     );

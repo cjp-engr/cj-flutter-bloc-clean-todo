@@ -9,7 +9,8 @@ import 'package:frontend/2_application/core/storage/secure_storage.dart';
 
 abstract class UserRemoteDatasource {
   Future<RegisterModel> registerUserInfoToDatabase(UserEntity user);
-  Future<LoginModel> loggedInUserFromDatabase(UserEntity user);
+  Future<String> loggedInUserFromDatabase(UserEntity user);
+  Future<LoginModel> userDetailsFromDatabase();
 }
 
 class UserRemoteDatasourceImpl implements UserRemoteDatasource {
@@ -22,7 +23,7 @@ class UserRemoteDatasourceImpl implements UserRemoteDatasource {
     required this.fbDatabase,
     required this.secureStorage,
   });
-
+  String get _userId => fbAuth.currentUser!.uid;
   CollectionReference<Map<String, dynamic>> _userCollection() =>
       fbDatabase.collection('users');
 
@@ -53,26 +54,32 @@ class UserRemoteDatasourceImpl implements UserRemoteDatasource {
   }
 
   @override
-  Future<LoginModel> loggedInUserFromDatabase(UserEntity user) async {
+  Future<String> loggedInUserFromDatabase(UserEntity user) async {
     try {
       final userCredential = await fbAuth.signInWithEmailAndPassword(
-        email: user.email,
-        password: user.password!,
-      );
+          email: user.email, password: user.password!);
       final signedInUser = userCredential.user!;
-      final DocumentSnapshot userDoc =
-          await _userCollection().doc(signedInUser.uid).get();
-      final data = userDoc.data() as Map<String, dynamic>?;
-
       final accessToken = await signedInUser.getIdToken();
 
       await secureStorage.write(
           key: SecureStorageKeys.accessToken, value: accessToken);
+      return signedInUser.uid;
+    } catch (_) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<LoginModel> userDetailsFromDatabase() async {
+    try {
+      final DocumentSnapshot userDoc =
+          await _userCollection().doc(_userId).get();
+      final data = userDoc.data() as Map<String, dynamic>?;
 
       return LoginModel(
-        id: signedInUser.uid,
-        email: user.email,
-        fullName: data!['fullName'],
+        id: data!['id'],
+        email: data['email'],
+        fullName: data['fullName'],
         username: data['username'],
       );
     } catch (_) {

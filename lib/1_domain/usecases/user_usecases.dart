@@ -25,9 +25,24 @@ class LoggedInUserUC implements UseCase<UserEntity, dynamic> {
   LoggedInUserUC({required this.userRepo});
 
   @override
-  Future<Either<Failure, UserEntity>> call(UserEntity user) async {
+  Future<Either<Failure, String>> call(UserEntity user) async {
     try {
       return await userRepo.loggedInExistingUserFromDataSource(user);
+    } catch (e) {
+      return Left(GeneralFailure());
+    }
+  }
+}
+
+class UserDetailsUC implements UseCaseNoParams {
+  final UserRepo userRepo;
+
+  UserDetailsUC({required this.userRepo});
+
+  @override
+  Future<Either<Failure, UserEntity>> call() async {
+    try {
+      return await userRepo.userDetailsFromDataSource();
     } catch (e) {
       return Left(GeneralFailure());
     }

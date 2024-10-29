@@ -17,6 +17,7 @@ import 'package:frontend/2_application/pages/completed_todos/bloc/completed_todo
 import 'package:frontend/2_application/pages/login/cubit/login_cubit.dart';
 import 'package:frontend/2_application/pages/register/bloc/register_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:frontend/2_application/pages/settings/bloc/settings_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,10 +27,10 @@ final sl = GetIt.I;
 Future<void> init() async {
   //! application layer
 
-  sl.registerFactory(() => LoginCubit(
-        userUC: sl(),
-      ));
+  sl.registerFactory(() => LoginCubit(userUC: sl()));
   sl.registerFactory(() => RegisterBloc(userUC: sl()));
+  sl.registerFactory(() => SettingsBloc(userDetailsUC: sl()));
+
   sl.registerFactory(
     () => AllTodosBloc(
       addTodoUC: sl(),
@@ -49,6 +50,7 @@ Future<void> init() async {
   // ! domain Layer
   sl.registerFactory(() => LoggedInUserUC(userRepo: sl()));
   sl.registerFactory(() => RegisterUserUC(userRepo: sl()));
+  sl.registerFactory(() => UserDetailsUC(userRepo: sl()));
 
   sl.registerFactory(() => AddTodoUC(todoRepo: sl()));
   sl.registerFactory(() => ReadTodosUC(todoRepo: sl()));
