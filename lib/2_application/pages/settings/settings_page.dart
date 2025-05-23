@@ -51,7 +51,6 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, state) {
-        print(state.status);
         if (state.status == BlocStatus.initial ||
             state.status == BlocStatus.loading) {
           return const TodoProgressIndicator();
