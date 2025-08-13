@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
+import 'package:frontend/l10n/app_localizations.dart';
 
 extension BuildContextExtension on BuildContext {
   double get screenHeight => MediaQuery.of(this).size.height;

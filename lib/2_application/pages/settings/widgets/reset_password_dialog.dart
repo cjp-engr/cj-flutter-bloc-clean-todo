@@ -8,14 +8,10 @@ import 'package:frontend/2_application/core/widgets/text.dart';
 import 'package:frontend/2_application/core/widgets/text_field.dart';
 
 class _ResetPasswordDialog extends StatelessWidget {
-  final Function()? onConfirm;
-  final String? buttonConfirmText;
-  final String? buttonCancelText;
+  final Function() onConfirm;
 
   const _ResetPasswordDialog({
-    this.onConfirm,
-    this.buttonConfirmText,
-    this.buttonCancelText,
+    required this.onConfirm,
   });
 
   @override
@@ -61,7 +57,7 @@ class _ResetPasswordDialog extends StatelessWidget {
               PrimaryButton(
                 text: 'Confirm',
                 onPressed: () {
-                  onConfirm!();
+                  onConfirm();
                   Navigator.of(context).pop();
                 },
               ),
@@ -81,7 +77,7 @@ Future<bool?> showResetPasswordDialog(
     context: context,
     barrierDismissible: false,
     builder: (_) => _ResetPasswordDialog(
-      onConfirm: onConfirm,
+      onConfirm: onConfirm ?? () {},
     ),
   );
 }

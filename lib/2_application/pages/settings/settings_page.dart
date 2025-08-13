@@ -5,6 +5,7 @@ import 'package:frontend/2_application/core/constants/font_size.dart';
 import 'package:frontend/2_application/core/constants/spacing.dart';
 import 'package:frontend/2_application/core/extension/bloc_api_status.dart';
 import 'package:frontend/2_application/core/routes/route_name.dart';
+import 'package:frontend/2_application/core/utils/build_context_ext.dart';
 import 'package:frontend/2_application/core/utils/icon_const.dart';
 import 'package:frontend/2_application/core/widgets/app_bar.dart';
 import 'package:frontend/2_application/core/widgets/buttons.dart';
@@ -99,12 +100,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     initialValue: state.user.email,
                   ),
                   const SizedBox(height: TodoSpacing.medium),
-                  PrimaryButton(
-                    text: 'Reset Password',
-                    width: double.infinity,
-                    onPressed: () => showResetPasswordDialog(context),
-                  ),
-                  const SizedBox(height: TodoSpacing.medium),
                   const Divider(),
                   const SizedBox(height: TodoSpacing.medium),
                   Row(
@@ -120,6 +115,18 @@ class _SettingsPageState extends State<SettingsPage> {
                         onChanged: (value) {
                           setState(() {});
                         },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: TodoSpacing.medium),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(),
+                      PrimaryButton(
+                        text: 'Reset Password',
+                        width: context.screenWidth / 3,
+                        onPressed: () => showResetPasswordDialog(context),
                       ),
                     ],
                   ),
